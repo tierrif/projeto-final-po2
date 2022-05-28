@@ -10,5 +10,5 @@
 package pt.ipbeja.po2.chartracer.model.util;
 
 public class Constants {
-    public static final String BASE_PATH = "resources/";
+    public static final String RESOURCE_PATH = "resources/";
 }

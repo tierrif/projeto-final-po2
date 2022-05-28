@@ -48,29 +48,12 @@ public abstract class DataReader {
      */
     protected abstract BarModel createInstance(String line);
 
-    // Private constructor.
     public DataReader() throws IOException {
-        String path = Constants.BASE_PATH + this.getFileName();
+        String path = Constants.RESOURCE_PATH + this.getFileName();
         this.type = parseTypeFromPath(path);
         this.readLines = Files.readAllLines(Paths.get(path))
                 .stream().filter(line -> !line.isBlank()).toList();
         this.parsedCharts = parseAllCharts();
-    }
-
-    private List<List<BarModel>> parseAllCharts() {
-        return Arrays.stream(String.join("\n", this.getReadLines())
-                .split("\n" + this.getCode()))
-                .skip(1) // Skip the header.
-                .map((chart) -> Arrays.stream(chart.split("\n"))
-                        .filter((line) -> !line.isBlank()))
-                .map((chart) -> chart.map(this::createInstance).toList())
-                .toList();
-    }
-
-    private String parseTypeFromPath(String path) {
-        String[] splitPath = path.split("/");
-        return splitPath[splitPath.length - 1].replace(".txt", "")
-                .toLowerCase();
     }
 
     /**
@@ -91,7 +74,28 @@ public abstract class DataReader {
         return type;
     }
 
+    /**
+     * Get the final parsed charts from the dataset.
+     *
+     * @return A list (dataset) of a list (chart) of the corresponding models (bars).
+     */
     public List<List<BarModel>> getParsedCharts() {
         return parsedCharts;
+    }
+
+    private List<List<BarModel>> parseAllCharts() {
+        return Arrays.stream(String.join("\n", this.getReadLines())
+                        .split("\n" + this.getCode()))
+                .skip(1) // Skip the header.
+                .map((chart) -> Arrays.stream(chart.split("\n"))
+                        .filter((line) -> !line.isBlank()))
+                .map((chart) -> chart.map(this::createInstance).toList())
+                .toList();
+    }
+
+    private String parseTypeFromPath(String path) {
+        String[] splitPath = path.split("/");
+        return splitPath[splitPath.length - 1].replace(".txt", "")
+                .toLowerCase();
     }
 }
