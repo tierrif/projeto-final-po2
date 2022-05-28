@@ -7,9 +7,9 @@
  *
  * @author Tierri Ferreira <22897@stu.ipbeja.pt>
  */
-package pt.ipbeja.po2.chartracer.model;
+package pt.ipbeja.po2.chartracer.model.bartypes;
 
-public abstract class ChartModel implements Comparable<Integer> {
+public abstract class BarModel implements Comparable<Integer> {
     /**
      * Compare a given int with this object's corresponding value
      * in an attribute.

@@ -7,9 +7,9 @@
  *
  * @author Tierri Ferreira <22897@stu.ipbeja.pt>
  */
-package pt.ipbeja.po2.chartracer.model;
+package pt.ipbeja.po2.chartracer.model.bartypes;
 
-public class City extends ChartModel {
+public class City extends BarModel {
     private final int year, population;
     private final String cityName, countryName, regionName;
 
@@ -23,26 +23,6 @@ public class City extends ChartModel {
         this.countryName = countryName;
         this.population = population;
         this.regionName = regionName;
-    }
-
-    /**
-     * Convert a serialized city from a dataset into a City object.
-     * An example of a serialized city looks like the following:
-     * 1500,Hangzhou,China,250,East Asia
-     *
-     * @param cityString The serialized city string to parse from.
-     * @return A parsed city object.
-     */
-    public static City fromString(String cityString) {
-        String[] splitCityString = cityString.split(",");
-        assert splitCityString.length == 5;
-        return new City(
-                Integer.parseInt(splitCityString[0]),
-                splitCityString[1],
-                splitCityString[2],
-                Integer.parseInt(splitCityString[3]),
-                splitCityString[4]
-        );
     }
 
     @Override
@@ -88,5 +68,16 @@ public class City extends ChartModel {
      */
     public String getRegionName() {
         return this.regionName;
+    }
+
+    @Override
+    public String toString() {
+        return "City{" +
+                "year=" + year +
+                ", population=" + population +
+                ", cityName='" + cityName + '\'' +
+                ", countryName='" + countryName + '\'' +
+                ", regionName='" + regionName + '\'' +
+                '}';
     }
 }
