@@ -7,7 +7,7 @@
  *
  * @author Tierri Ferreira <22897@stu.ipbeja.pt>
  */
-package pt.ipbeja.po2.chartracer.model.bartypes;
+package pt.ipbeja.po2.chartracer.model.types;
 
 public class City extends BarModel {
     private final int year, population;
@@ -32,6 +32,7 @@ public class City extends BarModel {
 
     /**
      * Get the year from this city entry.
+     *
      * @return The year from this city entry.
      */
     public int getYear() {
@@ -40,6 +41,7 @@ public class City extends BarModel {
 
     /**
      * Get the population at the year this city was studied.
+     *
      * @return the population at the year this city was studied.
      */
     public int getPopulation() {
@@ -48,6 +50,7 @@ public class City extends BarModel {
 
     /**
      * Get this city's name.
+     *
      * @return the city's name.
      */
     public String getCityName() {
@@ -56,6 +59,7 @@ public class City extends BarModel {
 
     /**
      * Get the country this city is in.
+     *
      * @return the country the city is in.
      */
     public String getCountryName() {
@@ -64,6 +68,7 @@ public class City extends BarModel {
 
     /**
      * Get the region this city's country is in.
+     *
      * @return the region the city's country is in.
      */
     public String getRegionName() {
@@ -72,12 +77,10 @@ public class City extends BarModel {
 
     @Override
     public String toString() {
-        return "City{" +
-                "year=" + year +
-                ", population=" + population +
-                ", cityName='" + cityName + '\'' +
-                ", countryName='" + countryName + '\'' +
-                ", regionName='" + regionName + '\'' +
-                '}';
+        return year + ","
+                + cityName + ","
+                + countryName + ","
+                + population + ","
+                + regionName;
     }
 }

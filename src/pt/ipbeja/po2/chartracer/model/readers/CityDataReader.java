@@ -7,10 +7,10 @@
  *
  * @author Tierri Ferreira <22897@stu.ipbeja.pt>
  */
-package pt.ipbeja.po2.chartracer.model.datasets;
+package pt.ipbeja.po2.chartracer.model.readers;
 
-import pt.ipbeja.po2.chartracer.model.bartypes.BarModel;
-import pt.ipbeja.po2.chartracer.model.bartypes.City;
+import pt.ipbeja.po2.chartracer.model.types.BarModel;
+import pt.ipbeja.po2.chartracer.model.types.City;
 
 import java.io.IOException;
 
@@ -24,12 +24,12 @@ public class CityDataReader extends DataReader {
     }
 
     @Override
-    public int getCode() {
+    public int getDelimiter() {
         return 12;
     }
 
     @Override
-    protected BarModel createInstance(String line) {
+    public BarModel parseLine(String line) {
         String[] splitCityString = line.split(",");
         assert splitCityString.length == 5;
         return new City(

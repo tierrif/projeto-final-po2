@@ -7,9 +7,9 @@
  *
  * @author Tierri Ferreira <22897@stu.ipbeja.pt>
  */
-package pt.ipbeja.po2.chartracer.model.bartypes;
+package pt.ipbeja.po2.chartracer.model.types;
 
-public abstract class BarModel implements Comparable<Integer> {
+public abstract class BarModel implements Comparable<BarModel> {
     /**
      * Compare a given int with this object's corresponding value
      * in an attribute.
@@ -19,10 +19,8 @@ public abstract class BarModel implements Comparable<Integer> {
      * given one, -1 if it's lower, 0 if it's equal.
      */
     @Override
-    public int compareTo(Integer value) {
-        return this.correspondingValue() > value
-                ? 1 : this.correspondingValue() < value
-                ? -1 : 0;
+    public int compareTo(BarModel value) {
+        return Integer.compare(this.correspondingValue(), value.correspondingValue());
     }
 
     /**

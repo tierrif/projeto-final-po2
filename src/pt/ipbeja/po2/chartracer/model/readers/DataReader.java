@@ -7,21 +7,23 @@
  *
  * @author Tierri Ferreira <22897@stu.ipbeja.pt>
  */
-package pt.ipbeja.po2.chartracer.model.datasets;
+package pt.ipbeja.po2.chartracer.model.readers;
 
-import pt.ipbeja.po2.chartracer.model.bartypes.BarModel;
+import pt.ipbeja.po2.chartracer.model.ChartDataset;
+import pt.ipbeja.po2.chartracer.model.types.BarModel;
 import pt.ipbeja.po2.chartracer.model.util.Constants;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 public abstract class DataReader {
     private final List<String> readLines;
     private final String type;
-    private final List<List<BarModel>> parsedCharts;
+    private final ChartDataset dataset;
 
     /**
      * Get the file name that contains the
@@ -32,12 +34,14 @@ public abstract class DataReader {
     public abstract String getFileName();
 
     /**
-     * Get the code corresponding to the
+     * Get the delimiter corresponding to the
      * dataset of this reader.
+     * This delimiter is always the amount of elements that
+     * a chart has.
      *
      * @return The code that identifies this dataset.
      */
-    public abstract int getCode();
+    public abstract int getDelimiter();
 
     /**
      * Generate an instance based on a text
@@ -46,14 +50,19 @@ public abstract class DataReader {
      * @param line Provided line from the dataset.
      * @return An instance that represents a bar in a chart.
      */
-    protected abstract BarModel createInstance(String line);
+    public abstract BarModel parseLine(String line);
 
+    /**
+     * Initializes a DataReader by reading and parsing
+     * the corresponding datasets.
+     * @throws IOException In case an error occurs while reading the file.
+     */
     public DataReader() throws IOException {
         String path = Constants.RESOURCE_PATH + this.getFileName();
         this.type = parseTypeFromPath(path);
         this.readLines = Files.readAllLines(Paths.get(path))
                 .stream().filter(line -> !line.isBlank()).toList();
-        this.parsedCharts = parseAllCharts();
+        this.dataset = this.parseDataset();
     }
 
     /**
@@ -79,17 +88,27 @@ public abstract class DataReader {
      *
      * @return A list (dataset) of a list (chart) of the corresponding models (bars).
      */
-    public List<List<BarModel>> getParsedCharts() {
-        return parsedCharts;
+    public ChartDataset getDataset() {
+        return dataset;
+    }
+
+    private ChartDataset parseDataset() {
+        String title = this.readLines.get(0);
+        String population = this.readLines.get(1);
+        String source = this.readLines.get(2);
+        List<List<BarModel>> parsedCharts = this.parseAllCharts();
+
+        return new ChartDataset(parsedCharts, title, population, source);
     }
 
     private List<List<BarModel>> parseAllCharts() {
         return Arrays.stream(String.join("\n", this.getReadLines())
-                        .split("\n" + this.getCode()))
+                        .split("\n" + this.getDelimiter()))
                 .skip(1) // Skip the header.
                 .map((chart) -> Arrays.stream(chart.split("\n"))
                         .filter((line) -> !line.isBlank()))
-                .map((chart) -> chart.map(this::createInstance).toList())
+                .map((chart) -> chart.map(this::parseLine)
+                        .sorted(Comparator.reverseOrder()).toList()) // Sort the datasets.
                 .toList();
     }
 
