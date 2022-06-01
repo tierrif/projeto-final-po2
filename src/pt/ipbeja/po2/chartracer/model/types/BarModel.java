@@ -28,5 +28,5 @@ public abstract class BarModel implements Comparable<BarModel> {
      * can be compared to.
      * @return The corresponding comparable value.
      */
-    protected abstract int correspondingValue();
+    public abstract int correspondingValue();
 }

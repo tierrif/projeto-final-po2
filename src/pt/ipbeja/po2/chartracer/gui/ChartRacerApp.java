@@ -10,7 +10,14 @@
 package pt.ipbeja.po2.chartracer.gui;
 
 import javafx.application.Application;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
+import pt.ipbeja.po2.chartracer.gui.chart.Chart;
+import pt.ipbeja.po2.chartracer.gui.chart.CityChart;
+import pt.ipbeja.po2.chartracer.model.readers.CityDataReader;
+import pt.ipbeja.po2.chartracer.model.readers.DataReader;
+
+import java.io.IOException;
 
 public class ChartRacerApp extends Application {
 
@@ -19,7 +26,12 @@ public class ChartRacerApp extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) throws IOException {
+        DataReader reader = new CityDataReader();
+        Chart chart = new CityChart(reader.getDataset());
+        Scene scene = new Scene(chart);
 
+        primaryStage.setScene(scene);
+        primaryStage.show();
     }
 }

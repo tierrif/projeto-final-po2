@@ -26,7 +26,6 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-
 class DataReaderTest {
     @Test
     void teste1() throws IOException {
@@ -76,5 +75,8 @@ class DataReaderTest {
         BarModel firstOutModel = outModels.get(0);
         BarModel firstReadModel = dataset.firstChart().get(0);
         assertEquals(firstOutModel.toString(), firstReadModel.toString());
+
+        System.out.println(firstOutModel);
+        System.out.println(firstReadModel);
     }
 }

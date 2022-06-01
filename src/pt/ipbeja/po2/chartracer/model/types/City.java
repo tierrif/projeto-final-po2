@@ -26,7 +26,7 @@ public class City extends BarModel {
     }
 
     @Override
-    protected int correspondingValue() {
+    public int correspondingValue() {
         return this.population;
     }
 
