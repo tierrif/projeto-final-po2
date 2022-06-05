@@ -39,4 +39,11 @@ public abstract class BarModel implements Comparable<BarModel> {
      * @return The current iteration value.
      */
     public abstract String correspondingIteration();
+
+    /**
+     * Get the identifier of this model.
+     *
+     * @return The identifier.
+     */
+    public abstract String identifier();
 }

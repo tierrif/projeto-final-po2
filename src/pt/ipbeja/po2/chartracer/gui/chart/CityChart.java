@@ -23,9 +23,9 @@ public class CityChart extends Chart {
     }
 
     @Override
-    public Bar generateBar(BarModel model, Color assignedColor) {
+    public Bar generateBar(int width, BarModel model, Color assignedColor, int previousDigitCount) {
         City city = (City) model;
-        return new Bar(city.getPopulation(),
+        return new Bar(width,
                 city.getPopulation(),
                 city.getCityName(),
                 assignedColor

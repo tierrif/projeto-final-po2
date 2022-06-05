@@ -24,32 +24,43 @@ import pt.ipbeja.po2.chartracer.model.util.Constants;
 import pt.ipbeja.po2.chartracer.model.util.Util;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public abstract class Chart extends StackPane {
-    private ChartDataset dataset;
-    private List<Color> colors;
+    private static final int MAX_DIGIT_COUNT_TOLERANCE = 3;
+    private final ChartDataset dataset;
+    private final Map<String, Color> colors;
+    private int previousDigitCount = -1;
 
     public Chart(ChartDataset dataset) {
         this.dataset = dataset;
-        this.colors = new ArrayList<>();
+        this.colors = new HashMap<>();
         this.createChart(dataset.firstChart());
         this.startAnimation();
     }
 
-    public abstract Bar generateBar(BarModel model, Color assignedColor);
+    public abstract Bar generateBar(int width, BarModel model, Color assignedColor, int previousDigitCount);
 
     private void createChart(List<BarModel> currentChart) {
         this.getChildren().clear();
+
         VBox chartBox = new VBox();
         chartBox.getChildren().addAll(this.createTitle(), this.createPopulationLabel());
+        BarModel firstModel = currentChart.get(0);
 
         String iteration = currentChart.get(0).correspondingIteration();
         for (int i = 0; i < currentChart.size(); i++) {
-            if (colors.size() <= i) colors.add(Util.randomColor());
+            if (colors.get(currentChart.get(i).identifier()) == null) {
+                colors.put(currentChart.get(i).identifier(), Util.randomColor());
+            }
             chartBox.getChildren().add(this.generateBar(
+                    this.calculateWidth(firstModel.correspondingValue(),
+                            currentChart.get(i).correspondingValue()),
                     currentChart.get(i),
-                    colors.get(i)
+                    colors.get(currentChart.get(i).identifier()),
+                    this.previousDigitCount
             ));
         }
 
@@ -63,6 +74,10 @@ public abstract class Chart extends StackPane {
         StackPane.setMargin(bottomRightInfo, new Insets(50));
 
         this.getChildren().addAll(chartBox, bottomRightInfo);
+
+        // Save the current digit count from the largest bar.
+        this.previousDigitCount = Util.numberDigitCount(
+                firstModel.correspondingValue());
     }
 
     private void startAnimation() {
@@ -123,11 +138,12 @@ public abstract class Chart extends StackPane {
         return source;
     }
 
-    public ChartDataset getDataset() {
-        return this.dataset;
-    }
+    private int calculateWidth(int largestValue, int current) {
+        if (largestValue < Constants.MAX_BAR_VALUE) return current;
 
-    public void setDataset(ChartDataset dataset) {
-        this.dataset = dataset;
+        // Check if this is the largest bar.
+        if (largestValue == current) return Constants.MAX_BAR_VALUE;
+
+        return (current * Constants.MAX_BAR_VALUE) / largestValue;
     }
 }

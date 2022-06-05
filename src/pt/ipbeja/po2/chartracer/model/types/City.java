@@ -35,6 +35,11 @@ public class City extends BarModel {
         return String.valueOf(this.year);
     }
 
+    @Override
+    public String identifier() {
+        return this.cityName;
+    }
+
     /**
      * Get the year from this city entry.
      *

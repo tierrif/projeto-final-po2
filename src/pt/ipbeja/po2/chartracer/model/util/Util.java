@@ -34,4 +34,14 @@ public class Util {
     public static int randomIndex(int length) {
         return (int) Math.floor(Math.random() * length);
     }
+
+    public static int numberDigitCount(int number) {
+        /*
+         * The exponent's value (log10) is exactly
+         * what we want. This is the amount of digits
+         * a number has, which can become an exponent
+         * of base 10.
+         */
+        return (int) (Math.log10(number)) + 1;
+    }
 }
