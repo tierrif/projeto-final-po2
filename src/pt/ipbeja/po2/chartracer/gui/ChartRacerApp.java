@@ -11,9 +11,7 @@ package pt.ipbeja.po2.chartracer.gui;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.control.CheckMenuItem;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import pt.ipbeja.po2.chartracer.gui.chart.Chart;
@@ -25,6 +23,7 @@ import pt.ipbeja.po2.chartracer.model.readers.GameOfThronesDataReader;
 import pt.ipbeja.po2.chartracer.model.util.Constants;
 
 import java.io.IOException;
+import java.nio.file.NoSuchFileException;
 
 public class ChartRacerApp extends Application {
 
@@ -41,7 +40,17 @@ public class ChartRacerApp extends Application {
      */
     @Override
     public void start(Stage primaryStage) throws IOException {
-        DataReader reader = new GameOfThronesDataReader();
+        DataReader reader;
+        try {
+            reader = new GameOfThronesDataReader();
+        } catch (NoSuchFileException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "File not found: " + e.getFile(),
+                    ButtonType.OK);
+            alert.setHeaderText(null);
+            alert.showAndWait();
+            System.exit(0);
+            return;
+        }
         VBox mainBox = new VBox();
         MenuBar menuBar = this.createMenu();
         Chart chart = new GameOfThronesChart(reader.getDataset());

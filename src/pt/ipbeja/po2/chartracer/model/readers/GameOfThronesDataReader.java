@@ -11,7 +11,6 @@
 package pt.ipbeja.po2.chartracer.model.readers;
 
 import pt.ipbeja.po2.chartracer.model.types.BarModel;
-import pt.ipbeja.po2.chartracer.model.types.Country;
 import pt.ipbeja.po2.chartracer.model.types.GameOfThrones;
 
 import java.io.IOException;
@@ -29,18 +28,18 @@ public class GameOfThronesDataReader extends DataReader {
 
     @Override
     public String getFileName() {
-        return "game-of-thrones.txt";
+        return "game-o-thrones.txt";
     }
 
     @Override
     public BarModel parseLine(String line) {
-        String[] splitCityString = line.split(",");
-        assert splitCityString.length == 5;
+        String[] splitString = line.split(",");
+        assert splitString.length == 5;
         return new GameOfThrones(
-                splitCityString[0],
-                splitCityString[1],
-                Integer.parseInt(splitCityString[3]),
-                splitCityString[2]
+                splitString[0],
+                splitString[1],
+                Integer.parseInt(splitString[3]),
+                splitString[2]
         );
     }
 }

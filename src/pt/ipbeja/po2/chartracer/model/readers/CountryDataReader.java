@@ -41,14 +41,14 @@ public class CountryDataReader extends DataReader {
 
     @Override
     public BarModel parseLine(String line) {
-        String[] splitCityString = line.split(",");
-        assert splitCityString.length == 5;
+        String[] splitString = line.split(",");
+        assert splitString.length == 5;
         return new Country(
-                splitCityString[0],
-                splitCityString[1],
-                splitCityString[2],
-                Integer.parseInt(splitCityString[3]),
-                splitCityString[4]
+                splitString[0],
+                splitString[1],
+                splitString[2],
+                Integer.parseInt(splitString[3]),
+                splitString[4]
         );
     }
 }
