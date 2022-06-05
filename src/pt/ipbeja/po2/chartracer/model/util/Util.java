@@ -40,4 +40,20 @@ public class Util {
     public static int randomIndex(int length) {
         return (int) Math.floor(Math.random() * length);
     }
+
+    /**
+     * Check whether a string can be parsed
+     * to an int or not.
+     *
+     * @param str The string that may be parsed.
+     * @return true if it is numeric, false if not.
+     */
+    public static boolean isNumeric(String str) {
+        try {
+            Integer.parseInt(str);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
 }

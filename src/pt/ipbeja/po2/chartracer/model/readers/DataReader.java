@@ -12,11 +12,12 @@ package pt.ipbeja.po2.chartracer.model.readers;
 import pt.ipbeja.po2.chartracer.model.ChartDataset;
 import pt.ipbeja.po2.chartracer.model.types.BarModel;
 import pt.ipbeja.po2.chartracer.model.util.Constants;
+import pt.ipbeja.po2.chartracer.model.util.Util;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -121,14 +122,26 @@ public abstract class DataReader {
      * the full dataset.
      */
     private List<List<BarModel>> parseAllCharts() {
-        return Arrays.stream(String.join("\n", this.getReadLines())
-                        .split("\n" + this.getDelimiter()))
-                .skip(1) // Skip the header.
-                .map((chart) -> Arrays.stream(chart.split("\n"))
-                        .filter((line) -> !line.isBlank()))
-                .map((chart) -> chart.map(this::parseLine)
-                        .sorted(Comparator.reverseOrder()).toList()) // Sort the datasets.
-                .toList();
+        List<String> lines = this.getReadLines().stream()
+                .filter((line) -> !line.isBlank()).skip(3).toList();
+
+        List<BarModel> currentList = new ArrayList<>();
+        List<List<BarModel>> finalList = new ArrayList<>();
+        for (int i = 0; i < lines.size(); i++) {
+            if (Util.isNumeric(lines.get(i))) {
+                if (i != 0) {
+                    finalList.add(currentList);
+                    currentList = new ArrayList<>();
+                }
+                continue;
+            }
+
+            currentList.add(this.parseLine(lines.get(i)));
+        }
+
+        return finalList.stream().map((chart) -> chart.stream()
+                .sorted(Comparator.reverseOrder()).toList() // Sort the datasets.
+                .subList(0, 8)).toList();
     }
 
     /**

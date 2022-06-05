@@ -133,7 +133,7 @@ public abstract class Chart extends StackPane {
         Text title = new Text(this.dataset.title());
         title.setTextAlignment(TextAlignment.CENTER);
         title.setFont(Font.font("Arial", FontWeight.BOLD, FontPosture.REGULAR, 24));
-        title.setWrappingWidth(Constants.WINDOW_WIDTH);
+        title.setWrappingWidth(Constants.INNER_WIDTH);
         VBox.setMargin(title, new Insets(5));
 
         return title;
@@ -150,7 +150,7 @@ public abstract class Chart extends StackPane {
         populationLabel.setTextAlignment(TextAlignment.LEFT);
         populationLabel.setFont(Font.font("Arial", FontWeight.BOLD, FontPosture.REGULAR, 14));
         populationLabel.setFill(Color.GRAY);
-        populationLabel.setWrappingWidth(Constants.WINDOW_WIDTH);
+        populationLabel.setWrappingWidth(Constants.INNER_WIDTH);
         VBox.setMargin(populationLabel, new Insets(5));
 
         return populationLabel;
@@ -170,7 +170,7 @@ public abstract class Chart extends StackPane {
         iterationText.setTextAlignment(TextAlignment.RIGHT);
         iterationText.setFont(Font.font("Arial", FontWeight.BOLD, FontPosture.REGULAR, 100));
         iterationText.setFill(Color.GRAY);
-        iterationText.setWrappingWidth(Constants.WINDOW_WIDTH);
+        iterationText.setWrappingWidth(Constants.INNER_WIDTH);
 
         return iterationText;
     }
@@ -186,7 +186,7 @@ public abstract class Chart extends StackPane {
         source.setTextAlignment(TextAlignment.RIGHT);
         source.setFont(Font.font("Arial", FontWeight.BOLD, FontPosture.REGULAR, 14));
         source.setFill(Color.GRAY);
-        source.setWrappingWidth(Constants.WINDOW_WIDTH);
+        source.setWrappingWidth(Constants.INNER_WIDTH);
 
         return source;
     }

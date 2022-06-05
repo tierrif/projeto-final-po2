@@ -11,11 +11,16 @@ package pt.ipbeja.po2.chartracer.gui;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.control.CheckMenuItem;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import pt.ipbeja.po2.chartracer.gui.chart.Chart;
 import pt.ipbeja.po2.chartracer.gui.chart.CityChart;
 import pt.ipbeja.po2.chartracer.model.readers.CityDataReader;
 import pt.ipbeja.po2.chartracer.model.readers.DataReader;
+import pt.ipbeja.po2.chartracer.model.util.Constants;
 
 import java.io.IOException;
 
@@ -35,10 +40,27 @@ public class ChartRacerApp extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
         DataReader reader = new CityDataReader();
+        VBox mainBox = new VBox();
+        MenuBar menuBar = this.createMenu();
         Chart chart = new CityChart(reader.getDataset());
-        Scene scene = new Scene(chart);
+        mainBox.getChildren().addAll(menuBar, chart);
+        Scene scene = new Scene(mainBox);
 
         primaryStage.setScene(scene);
+        primaryStage.setMinWidth(Constants.WINDOW_WIDTH);
+        primaryStage.setMinHeight(Constants.WINDOW_HEIGHT);
         primaryStage.show();
+    }
+
+    private MenuBar createMenu() {
+        MenuBar menu = new MenuBar();
+
+        Menu skins = new Menu("Skin");
+        CheckMenuItem item = new CheckMenuItem("Classic");
+        skins.getItems().add(item);
+
+        menu.getMenus().add(skins);
+
+        return menu;
     }
 }

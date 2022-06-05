@@ -13,7 +13,9 @@ import javafx.scene.paint.Color;
 
 public class Constants {
     public static final String RESOURCE_PATH = "resources/";
-    public static final double WINDOW_WIDTH = 1000.0;
+    public static final double INNER_WIDTH = 1000.0;
+    public static final double WINDOW_WIDTH = 1100.0;
+    public static final double WINDOW_HEIGHT = 500.0;
     public static final double BAR_HEIGHT = 40.0;
     public static final int MAX_BAR_VALUE = 1000;
     public static final Color[] COLOR_LIST = {
