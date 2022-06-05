@@ -26,7 +26,17 @@ public abstract class BarModel implements Comparable<BarModel> {
     /**
      * Get the value that corresponds to what this object
      * can be compared to.
+     *
      * @return The corresponding comparable value.
      */
     public abstract int correspondingValue();
+
+    /**
+     * Get the value that corresponds to the current
+     * value of an X axis. For example, the current
+     * year.
+     *
+     * @return The current iteration value.
+     */
+    public abstract String correspondingIteration();
 }

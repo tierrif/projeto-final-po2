@@ -30,6 +30,11 @@ public class City extends BarModel {
         return this.population;
     }
 
+    @Override
+    public String correspondingIteration() {
+        return String.valueOf(this.year);
+    }
+
     /**
      * Get the year from this city entry.
      *
