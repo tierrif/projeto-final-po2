@@ -1,4 +1,4 @@
-/*
+/**
  * Instituto Politécnico de Beja
  * Escola Superior de Tecnologia e Gestão
  * Licenciatura em Engenharia Informática
@@ -7,20 +7,19 @@
  *
  * @author Tierri Ferreira <22897@stu.ipbeja.pt>
  */
-
 package pt.ipbeja.po2.chartracer.model.util;
 
 import javafx.scene.paint.Color;
 
 public class Util {
     private static int previous;
-    private static final Color[] COLOR_LIST = {
-            Color.rgb(160, 193, 233),
-            Color.rgb(198, 144, 136),
-            Color.rgb(216, 220, 131),
-            Color.rgb(194, 165, 211),
-    };
 
+    /**
+     * Get a random color from the COLOR_LIST
+     * constant, saved in Constants.
+     *
+     * @return A random color from the COLOR_LIST constant.
+     */
     public static Color randomColor() {
         int index;
         do {
@@ -28,20 +27,17 @@ public class Util {
         } while (index == previous);
         previous = index;
 
-        return COLOR_LIST[index];
+        return Constants.COLOR_LIST[index];
     }
 
+    /**
+     * Get a random index from a given length.
+     *
+     * @param length The length of the array/collection to
+     *               get a random index from.
+     * @return A random index for length.
+     */
     public static int randomIndex(int length) {
         return (int) Math.floor(Math.random() * length);
-    }
-
-    public static int numberDigitCount(int number) {
-        /*
-         * The exponent's value (log10) is exactly
-         * what we want. This is the amount of digits
-         * a number has, which can become an exponent
-         * of base 10.
-         */
-        return (int) (Math.log10(number)) + 1;
     }
 }

@@ -1,4 +1,4 @@
-/*
+/**
  * Instituto Politécnico de Beja
  * Escola Superior de Tecnologia e Gestão
  * Licenciatura em Engenharia Informática
@@ -7,7 +7,6 @@
  *
  * @author Tierri Ferreira <22897@stu.ipbeja.pt>
  */
-
 package pt.ipbeja.po2.chartracer.gui.bar;
 
 import javafx.geometry.Insets;
@@ -27,6 +26,14 @@ public class Bar extends StackPane {
     private final String name;
     private final Color color;
 
+    /**
+     * Create a Bar item.
+     *
+     * @param width The bar's width (pre-calculated).
+     * @param value The actual value to show on a label.
+     * @param name The name of the bar item.
+     * @param color The fill color of the bar's rectangle.
+     */
     public Bar(int width, int value, String name, Color color) {
         this.width = width;
         this.value = value;
@@ -35,6 +42,9 @@ public class Bar extends StackPane {
         this.createBar();
     }
 
+    /**
+     * Creates the bar through JavaFX.
+     */
     private void createBar() {
         HBox box = new HBox();
         Rectangle barRectangle = new Rectangle();

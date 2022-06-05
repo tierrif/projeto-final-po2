@@ -39,7 +39,7 @@ public abstract class DataReader {
      * This delimiter is always the amount of elements that
      * a chart has.
      *
-     * @return The code that identifies this dataset.
+     * @return The delimiter to parse this dataset.
      */
     public abstract int getDelimiter();
 
@@ -55,6 +55,7 @@ public abstract class DataReader {
     /**
      * Initializes a DataReader by reading and parsing
      * the corresponding datasets.
+     *
      * @throws IOException In case an error occurs while reading the file.
      */
     public DataReader() throws IOException {
@@ -92,6 +93,12 @@ public abstract class DataReader {
         return dataset;
     }
 
+    /**
+     * Parse the dataset from the read file.
+     *
+     * @return The parsed dataset as a ChartDataset
+     * record instance.
+     */
     private ChartDataset parseDataset() {
         String title = this.readLines.get(0);
         String population = this.readLines.get(1);
@@ -101,6 +108,18 @@ public abstract class DataReader {
         return new ChartDataset(parsedCharts, title, population, source);
     }
 
+    /**
+     * Parse the charts into a list of frames (which
+     * are lists of bar models) from the read files.
+     * Functional programming is used to improve
+     * code readability.
+     * Arrays.stream() is a cleaner way to stream an
+     * array, instead of using Arrays.asList(...).stream():
+     * Warning provided by IntelliJ.
+     *
+     * @return The list of frames of a bar model to add into
+     * the full dataset.
+     */
     private List<List<BarModel>> parseAllCharts() {
         return Arrays.stream(String.join("\n", this.getReadLines())
                         .split("\n" + this.getDelimiter()))
@@ -112,6 +131,13 @@ public abstract class DataReader {
                 .toList();
     }
 
+    /**
+     * Parse the type/name of the dataset by retrieving
+     * it from the file name, removing the ".txt" extension.
+     *
+     * @param path The original file path.
+     * @return The parsed dataset type/name.
+     */
     private String parseTypeFromPath(String path) {
         String[] splitPath = path.split("/");
         return splitPath[splitPath.length - 1].replace(".txt", "")

@@ -25,6 +25,13 @@ public class ChartRacerApp extends Application {
         launch(args);
     }
 
+    /**
+     * Initialize the JavaFX Chart Racer App.
+     *
+     * @param primaryStage The Stage provided by JavaFX.
+     * @throws IOException In case an exception is thrown
+     * while reading the dataset from files.
+     */
     @Override
     public void start(Stage primaryStage) throws IOException {
         DataReader reader = new CityDataReader();

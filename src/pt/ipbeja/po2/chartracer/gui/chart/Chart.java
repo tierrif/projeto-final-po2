@@ -1,4 +1,4 @@
-/*
+/**
  * Instituto Politécnico de Beja
  * Escola Superior de Tecnologia e Gestão
  * Licenciatura em Engenharia Informática
@@ -7,7 +7,6 @@
  *
  * @author Tierri Ferreira <22897@stu.ipbeja.pt>
  */
-
 package pt.ipbeja.po2.chartracer.gui.chart;
 
 import javafx.application.Platform;
@@ -23,17 +22,21 @@ import pt.ipbeja.po2.chartracer.model.types.BarModel;
 import pt.ipbeja.po2.chartracer.model.util.Constants;
 import pt.ipbeja.po2.chartracer.model.util.Util;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public abstract class Chart extends StackPane {
-    private static final int MAX_DIGIT_COUNT_TOLERANCE = 3;
     private final ChartDataset dataset;
     private final Map<String, Color> colors;
-    private int previousDigitCount = -1;
 
+    /**
+     * Create a full Chart pane for this
+     * chart racer app. Call via super()
+     * from the inheriting class.
+     *
+     * @param dataset The dataset to work with.
+     */
     public Chart(ChartDataset dataset) {
         this.dataset = dataset;
         this.colors = new HashMap<>();
@@ -41,8 +44,28 @@ public abstract class Chart extends StackPane {
         this.startAnimation();
     }
 
-    public abstract Bar generateBar(int width, BarModel model, Color assignedColor, int previousDigitCount);
+    /**
+     * Generate a Bar pane (rectangle) by getting all
+     * necessary info from the BarModel instance in
+     * its original type.
+     *
+     * @param width         The bar's width (pre-calculated).
+     * @param model         The bar's model.
+     * @param assignedColor The pre-assigned fill color for this bar.
+     * @return The generated Bar pane to directly add into the Chart Pane.
+     */
+    public abstract Bar generateBar(int width,
+                                    BarModel model,
+                                    Color assignedColor
+    );
 
+    /**
+     * Create a chart with a list of bar models from
+     * the dataset. This counts as a frame.
+     *
+     * @param currentChart The current list of bar models
+     *                     for this specific frame.
+     */
     private void createChart(List<BarModel> currentChart) {
         this.getChildren().clear();
 
@@ -59,8 +82,7 @@ public abstract class Chart extends StackPane {
                     this.calculateWidth(firstModel.correspondingValue(),
                             currentChart.get(i).correspondingValue()),
                     currentChart.get(i),
-                    colors.get(currentChart.get(i).identifier()),
-                    this.previousDigitCount
+                    colors.get(currentChart.get(i).identifier())
             ));
         }
 
@@ -74,12 +96,16 @@ public abstract class Chart extends StackPane {
         StackPane.setMargin(bottomRightInfo, new Insets(50));
 
         this.getChildren().addAll(chartBox, bottomRightInfo);
-
-        // Save the current digit count from the largest bar.
-        this.previousDigitCount = Util.numberDigitCount(
-                firstModel.correspondingValue());
     }
 
+    /**
+     * Start the animation. This initiates a new
+     * thread so that the window doesn't freeze
+     * while doing this animation. It will iterate
+     * the whole dataset's bar list and create a chart
+     * (by calling this.createChart(), which represents
+     * a frame) every iteration.
+     */
     private void startAnimation() {
         Thread t = new Thread(() -> {
             // i starts at 1 as we are skipping the first position.
@@ -97,6 +123,12 @@ public abstract class Chart extends StackPane {
         t.start();
     }
 
+    /**
+     * Creates the title text with
+     * all formatting.
+     *
+     * @return A Text with the title.
+     */
     private Text createTitle() {
         Text title = new Text(this.dataset.title());
         title.setTextAlignment(TextAlignment.CENTER);
@@ -107,6 +139,12 @@ public abstract class Chart extends StackPane {
         return title;
     }
 
+    /**
+     * Creates the population label Text
+     * with all formatting.
+     *
+     * @return A Text with the population.
+     */
     private Text createPopulationLabel() {
         Text populationLabel = new Text(this.dataset.population());
         populationLabel.setTextAlignment(TextAlignment.LEFT);
@@ -118,6 +156,15 @@ public abstract class Chart extends StackPane {
         return populationLabel;
     }
 
+    /**
+     * Creates the iteration label text
+     * (for example, current year), based
+     * on the iteration param with all
+     * needed formatting.
+     *
+     * @param iteration The current iteration (i.e. year/x value)
+     * @return A Text with the iteration value.
+     */
     private Text createIterationText(String iteration) {
         Text iterationText = new Text(iteration);
         iterationText.setTextAlignment(TextAlignment.RIGHT);
@@ -128,6 +175,12 @@ public abstract class Chart extends StackPane {
         return iterationText;
     }
 
+    /**
+     * Creates the source Text label
+     * with all formatting.
+     *
+     * @return The source Text.
+     */
     private Text createSourceText() {
         Text source = new Text(this.dataset.source());
         source.setTextAlignment(TextAlignment.RIGHT);
@@ -138,12 +191,33 @@ public abstract class Chart extends StackPane {
         return source;
     }
 
+    /**
+     * Calculates the width based on the maximum value,
+     * current largest and current using a simple
+     * Rule of Three.
+     * The maximum value will be the width of the largest
+     * bar forever, as it reaches this maximum value.
+     * Since we want all bars to be directly proportional, the Rule
+     * of Three can be used here.
+     *
+     * @param largestValue The current largest value of this frame.
+     * @param current      The current value of this bar.
+     * @return The calculated width, directly proportional to the
+     * maximum width, or the current width if this value hasn't been
+     * reached yet.
+     */
     private int calculateWidth(int largestValue, int current) {
         if (largestValue < Constants.MAX_BAR_VALUE) return current;
 
         // Check if this is the largest bar.
         if (largestValue == current) return Constants.MAX_BAR_VALUE;
 
+        /*
+         * largestValue --- max
+         * current      --- x
+         *
+         * x = (current * max) / largestValue
+         */
         return (current * Constants.MAX_BAR_VALUE) / largestValue;
     }
 }
