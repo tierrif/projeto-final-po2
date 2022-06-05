@@ -10,6 +10,7 @@
 
 package pt.ipbeja.po2.chartracer.gui.chart;
 
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.layout.StackPane;
@@ -20,27 +21,36 @@ import pt.ipbeja.po2.chartracer.gui.bar.Bar;
 import pt.ipbeja.po2.chartracer.model.ChartDataset;
 import pt.ipbeja.po2.chartracer.model.types.BarModel;
 import pt.ipbeja.po2.chartracer.model.util.Constants;
+import pt.ipbeja.po2.chartracer.model.util.Util;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Chart extends StackPane {
     private ChartDataset dataset;
+    private List<Color> colors;
 
     public Chart(ChartDataset dataset) {
         this.dataset = dataset;
-        this.createChart();
+        this.colors = new ArrayList<>();
+        this.createChart(dataset.firstChart());
+        this.startAnimation();
     }
 
-    public abstract Bar generateBar(BarModel model);
+    public abstract Bar generateBar(BarModel model, Color assignedColor);
 
-    private void createChart() {
+    private void createChart(List<BarModel> currentChart) {
+        this.getChildren().clear();
         VBox chartBox = new VBox();
         chartBox.getChildren().addAll(this.createTitle(), this.createPopulationLabel());
 
-        List<BarModel> firstChart = this.dataset.barList().get(0);
-        String iteration = firstChart.get(0).correspondingIteration();
-        for (BarModel model : firstChart) {
-            chartBox.getChildren().add(this.generateBar(model));
+        String iteration = currentChart.get(0).correspondingIteration();
+        for (int i = 0; i < currentChart.size(); i++) {
+            if (colors.size() <= i) colors.add(Util.randomColor());
+            chartBox.getChildren().add(this.generateBar(
+                    currentChart.get(i),
+                    colors.get(i)
+            ));
         }
 
         VBox bottomRightInfo = new VBox();
@@ -53,6 +63,23 @@ public abstract class Chart extends StackPane {
         StackPane.setMargin(bottomRightInfo, new Insets(50));
 
         this.getChildren().addAll(chartBox, bottomRightInfo);
+    }
+
+    private void startAnimation() {
+        Thread t = new Thread(() -> {
+            // i starts at 1 as we are skipping the first position.
+            for (int i = 1; i < dataset.barList().size(); i++) {
+                List<BarModel> models = dataset.barList().get(i);
+                Platform.runLater(() -> this.createChart(models));
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        t.start();
     }
 
     private Text createTitle() {

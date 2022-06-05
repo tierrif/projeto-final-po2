@@ -10,6 +10,7 @@
 
 package pt.ipbeja.po2.chartracer.gui.chart;
 
+import javafx.scene.paint.Color;
 import pt.ipbeja.po2.chartracer.gui.bar.Bar;
 import pt.ipbeja.po2.chartracer.model.ChartDataset;
 import pt.ipbeja.po2.chartracer.model.types.BarModel;
@@ -22,12 +23,12 @@ public class CityChart extends Chart {
     }
 
     @Override
-    public Bar generateBar(BarModel model) {
+    public Bar generateBar(BarModel model, Color assignedColor) {
         City city = (City) model;
         return new Bar(city.getPopulation(),
                 city.getPopulation(),
                 city.getCityName(),
-                Util.randomColor()
+                assignedColor
         );
     }
 }
