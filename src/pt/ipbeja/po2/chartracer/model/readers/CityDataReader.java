@@ -39,19 +39,6 @@ public class CityDataReader extends DataReader {
     }
 
     /**
-     * Get the delimiter corresponding to the
-     * dataset of this reader.
-     * This delimiter is always the amount of elements that
-     * a chart has.
-     *
-     * @return The delimiter to parse this dataset.
-     */
-    @Override
-    public int getDelimiter() {
-        return 12;
-    }
-
-    /**
      * Generate an instance based on a text
      * line from the dataset.
      *

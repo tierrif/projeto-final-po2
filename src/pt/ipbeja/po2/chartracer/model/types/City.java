@@ -67,6 +67,11 @@ public class City extends BarModel {
         return this.cityName;
     }
 
+    @Override
+    public int animationDelay() {
+        return 100;
+    }
+
     /**
      * Get the year from this city entry.
      *

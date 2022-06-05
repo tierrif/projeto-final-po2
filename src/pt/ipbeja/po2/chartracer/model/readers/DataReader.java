@@ -35,16 +35,6 @@ public abstract class DataReader {
     public abstract String getFileName();
 
     /**
-     * Get the delimiter corresponding to the
-     * dataset of this reader.
-     * This delimiter is always the amount of elements that
-     * a chart has.
-     *
-     * @return The delimiter to parse this dataset.
-     */
-    public abstract int getDelimiter();
-
-    /**
      * Generate an instance based on a text
      * line from the dataset.
      *
@@ -141,7 +131,7 @@ public abstract class DataReader {
 
         return finalList.stream().map((chart) -> chart.stream()
                 .sorted(Comparator.reverseOrder()).toList() // Sort the datasets.
-                .subList(0, 8)).toList();
+                .subList(0, Math.min(chart.size(), 8))).toList();
     }
 
     /**

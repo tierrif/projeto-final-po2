@@ -46,4 +46,11 @@ public abstract class BarModel implements Comparable<BarModel> {
      * @return The identifier.
      */
     public abstract String identifier();
+
+    /**
+     * The amount of milliseconds to delay per frame.
+     *
+     * @return Milliseconds of delay per frame.
+     */
+    public abstract int animationDelay();
 }

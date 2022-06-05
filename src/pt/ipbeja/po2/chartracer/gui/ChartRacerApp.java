@@ -17,9 +17,11 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import pt.ipbeja.po2.chartracer.gui.chart.Chart;
-import pt.ipbeja.po2.chartracer.gui.chart.CityChart;
-import pt.ipbeja.po2.chartracer.model.readers.CityDataReader;
+import pt.ipbeja.po2.chartracer.gui.chart.CountryChart;
+import pt.ipbeja.po2.chartracer.gui.chart.GameOfThronesChart;
+import pt.ipbeja.po2.chartracer.model.readers.CountryDataReader;
 import pt.ipbeja.po2.chartracer.model.readers.DataReader;
+import pt.ipbeja.po2.chartracer.model.readers.GameOfThronesDataReader;
 import pt.ipbeja.po2.chartracer.model.util.Constants;
 
 import java.io.IOException;
@@ -39,10 +41,10 @@ public class ChartRacerApp extends Application {
      */
     @Override
     public void start(Stage primaryStage) throws IOException {
-        DataReader reader = new CityDataReader();
+        DataReader reader = new GameOfThronesDataReader();
         VBox mainBox = new VBox();
         MenuBar menuBar = this.createMenu();
-        Chart chart = new CityChart(reader.getDataset());
+        Chart chart = new GameOfThronesChart(reader.getDataset());
         mainBox.getChildren().addAll(menuBar, chart);
         Scene scene = new Scene(mainBox);
 

@@ -113,7 +113,7 @@ public abstract class Chart extends StackPane {
                 List<BarModel> models = dataset.barList().get(i);
                 Platform.runLater(() -> this.createChart(models));
                 try {
-                    Thread.sleep(100);
+                    Thread.sleep(models.get(0).animationDelay());
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
