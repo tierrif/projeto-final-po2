@@ -18,6 +18,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.*;
 import pt.ipbeja.po2.chartracer.gui.bar.Bar;
 import pt.ipbeja.po2.chartracer.model.ChartDataset;
+import pt.ipbeja.po2.chartracer.model.DataHandler;
 import pt.ipbeja.po2.chartracer.model.types.BarModel;
 import pt.ipbeja.po2.chartracer.model.util.Constants;
 import pt.ipbeja.po2.chartracer.model.util.Util;
@@ -29,6 +30,9 @@ import java.util.Map;
 public abstract class Chart extends StackPane {
     private final ChartDataset dataset;
     private final Map<String, Color> colors;
+    private Thread animationThread;
+    private boolean isRunning;
+    private final DataHandler handler;
 
     /**
      * Create a full Chart pane for this
@@ -37,9 +41,20 @@ public abstract class Chart extends StackPane {
      *
      * @param dataset The dataset to work with.
      */
-    public Chart(ChartDataset dataset) {
+    public Chart(ChartDataset dataset, DataHandler handler) {
         this.dataset = dataset;
         this.colors = new HashMap<>();
+        this.handler = handler;
+    }
+
+    /**
+     * Initialize the chart's visuals. Calling
+     * this method will start the animation
+     * thread.
+     */
+    public void start() {
+        this.isRunning = true;
+        this.handler.setCurrentRunningChart(this);
         this.createChart(dataset.firstChart());
         this.startAnimation();
     }
@@ -58,6 +73,35 @@ public abstract class Chart extends StackPane {
                                     BarModel model,
                                     Color assignedColor
     );
+
+    /**
+     * Get the current animation thread.
+     *
+     * @return The current animation thread or null
+     * if no animation thread is running.
+     */
+    public Thread getAnimationThread() {
+        return this.animationThread;
+    }
+
+    /**
+     * Check whether the animation is running
+     * or not.
+     *
+     * @return true if it is, false if it isn't.
+     */
+    public boolean isRunning() {
+        return this.isRunning;
+    }
+
+    /**
+     * Set the chart to be running or not.
+     *
+     * @param running True if it's running, false if not.
+     */
+    public void setRunning(boolean running) {
+        this.isRunning = running;
+    }
 
     /**
      * Create a chart with a list of bar models from
@@ -107,7 +151,7 @@ public abstract class Chart extends StackPane {
      * a frame) every iteration.
      */
     private void startAnimation() {
-        Thread t = new Thread(() -> {
+        this.animationThread = new Thread(() -> {
             // i starts at 1 as we are skipping the first position.
             for (int i = 1; i < dataset.barList().size(); i++) {
                 List<BarModel> models = dataset.barList().get(i);
@@ -117,10 +161,12 @@ public abstract class Chart extends StackPane {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+
+                if (i == dataset.barList().size() - 1) this.isRunning = false;
             }
         });
 
-        t.start();
+        this.animationThread.start();
     }
 
     /**

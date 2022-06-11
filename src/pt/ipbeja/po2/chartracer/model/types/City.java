@@ -69,7 +69,7 @@ public class City extends BarModel {
 
     @Override
     public int animationDelay() {
-        return 100;
+        return 80;
     }
 
     /**

@@ -12,12 +12,13 @@ package pt.ipbeja.po2.chartracer.gui.chart;
 import javafx.scene.paint.Color;
 import pt.ipbeja.po2.chartracer.gui.bar.Bar;
 import pt.ipbeja.po2.chartracer.model.ChartDataset;
+import pt.ipbeja.po2.chartracer.model.DataHandler;
 import pt.ipbeja.po2.chartracer.model.types.BarModel;
 import pt.ipbeja.po2.chartracer.model.types.City;
 
 public class CityChart extends Chart {
-    public CityChart(ChartDataset dataset) {
-        super(dataset);
+    public CityChart(ChartDataset dataset, DataHandler handler) {
+        super(dataset, handler);
     }
 
     /**

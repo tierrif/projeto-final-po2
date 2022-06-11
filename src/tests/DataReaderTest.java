@@ -15,6 +15,7 @@ import pt.ipbeja.po2.chartracer.model.readers.CityDataReader;
 import pt.ipbeja.po2.chartracer.model.readers.DataReader;
 import pt.ipbeja.po2.chartracer.model.types.BarModel;
 import pt.ipbeja.po2.chartracer.model.util.Constants;
+import pt.ipbeja.po2.chartracer.model.util.Util;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -78,5 +79,10 @@ class DataReaderTest {
 
         System.out.println(firstOutModel);
         System.out.println(firstReadModel);
+    }
+
+    @Test
+    void capitalizetTest() {
+        System.out.println(Util.capitalize("GAME_OF_THRONES"));
     }
 }

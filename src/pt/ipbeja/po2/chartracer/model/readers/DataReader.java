@@ -118,7 +118,7 @@ public abstract class DataReader {
         List<BarModel> currentList = new ArrayList<>();
         List<List<BarModel>> finalList = new ArrayList<>();
         for (int i = 0; i < lines.size(); i++) {
-            if (Util.isNumeric(lines.get(i))) {
+        if (Util.isNumeric(lines.get(i)) || i == lines.size() - 1) {
                 if (i != 0) {
                     finalList.add(currentList);
                     currentList = new ArrayList<>();

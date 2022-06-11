@@ -1,4 +1,4 @@
-/*
+/**
  * Instituto Politécnico de Beja
  * Escola Superior de Tecnologia e Gestão
  * Licenciatura em Engenharia Informática
@@ -7,12 +7,11 @@
  *
  * @author Tierri Ferreira <22897@stu.ipbeja.pt>
  */
-
 package pt.ipbeja.po2.chartracer.model.types;
 
 public class GameOfThrones extends BarModel {
-    private String timestamp, character, house;
-    int popularity;
+    private final String timestamp, character, house;
+    private final int popularity;
 
     public GameOfThrones(String timestamp, String character, int popularity, String house) {
         this.timestamp = timestamp;

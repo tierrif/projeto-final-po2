@@ -1,4 +1,4 @@
-/*
+/**
  * Instituto Politécnico de Beja
  * Escola Superior de Tecnologia e Gestão
  * Licenciatura em Engenharia Informática
@@ -7,19 +7,18 @@
  *
  * @author Tierri Ferreira <22897@stu.ipbeja.pt>
  */
-
 package pt.ipbeja.po2.chartracer.gui.chart;
 
 import javafx.scene.paint.Color;
 import pt.ipbeja.po2.chartracer.gui.bar.Bar;
 import pt.ipbeja.po2.chartracer.model.ChartDataset;
+import pt.ipbeja.po2.chartracer.model.DataHandler;
 import pt.ipbeja.po2.chartracer.model.types.BarModel;
-import pt.ipbeja.po2.chartracer.model.types.Country;
 import pt.ipbeja.po2.chartracer.model.types.GameOfThrones;
 
 public class GameOfThronesChart extends Chart {
-    public GameOfThronesChart(ChartDataset dataset) {
-        super(dataset);
+    public GameOfThronesChart(ChartDataset dataset, DataHandler handler) {
+        super(dataset, handler);
     }
 
     /**

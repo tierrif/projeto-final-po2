@@ -1,4 +1,4 @@
-/*
+/**
  * Instituto Politécnico de Beja
  * Escola Superior de Tecnologia e Gestão
  * Licenciatura em Engenharia Informática
@@ -7,7 +7,6 @@
  *
  * @author Tierri Ferreira <22897@stu.ipbeja.pt>
  */
-
 package pt.ipbeja.po2.chartracer.model.readers;
 
 import pt.ipbeja.po2.chartracer.model.types.BarModel;
@@ -28,7 +27,7 @@ public class GameOfThronesDataReader extends DataReader {
 
     @Override
     public String getFileName() {
-        return "game-o-thrones.txt";
+        return "game-of-thrones.txt";
     }
 
     @Override

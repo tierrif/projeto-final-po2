@@ -42,6 +42,29 @@ public class Util {
     }
 
     /**
+     * Capitalize a string and divide it by
+     * words, originally separated by underscores.
+     *
+     * Example: GAME_OF_THRONES -> Game Of Thrones
+     *
+     * @param str The string to capitalize.
+     * @return The capitalized string.
+     */
+    public static String capitalize(String str) {
+        String[] splitString = str.split("_");
+        StringBuilder builder = new StringBuilder();
+
+        for (int i = 0; i < splitString.length; i++) {
+            char firstChar = Character.toUpperCase(splitString[i].charAt(0));
+            builder.append(firstChar)
+                    .append(splitString[i].substring(1).toLowerCase())
+                    .append(" ");
+        }
+
+        return builder.toString().trim();
+    }
+
+    /**
      * Check whether a string can be parsed
      * to an int or not.
      *
