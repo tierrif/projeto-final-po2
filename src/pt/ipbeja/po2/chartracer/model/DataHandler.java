@@ -9,11 +9,13 @@
  */
 package pt.ipbeja.po2.chartracer.model;
 
+import javafx.application.Platform;
 import pt.ipbeja.po2.chartracer.gui.chart.*;
 import pt.ipbeja.po2.chartracer.model.readers.*;
 import pt.ipbeja.po2.chartracer.model.skins.SkinHandler;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,10 +24,12 @@ public class DataHandler {
     private final Map<DataType, Correspondence> correspondences;
     private Chart currentRunningChart;
     private SkinHandler skinHandler;
+    private List<Listener> listeners;
 
     public DataHandler(SkinHandler skinHandler) {
         this.correspondences = new HashMap<>();
         this.skinHandler = skinHandler;
+        this.listeners = new ArrayList<>();
     }
 
     /**
@@ -37,19 +41,48 @@ public class DataHandler {
      * Existing correspondences will be overwritten and new
      * ones will simply be added.
      *
-     * @throws IOException If there's a problem while reading
-     * a specific file.
+     * @throws IOException                   If there's a problem while reading
+     *                                       a specific file.
      * @throws java.io.FileNotFoundException If a file isn't
-     * found.
+     *                                       found.
      */
     public void initialize() throws IOException {
-        DataReader currentDataReader = new CityDataReader();
+        // Default.
+        DataReader cityDataReader = new CityDataReader();
         this.correspondences.put(DataType.CITY, new Correspondence(
-           currentDataReader,
-           new CityChart(currentDataReader.getDataset(), this, this.skinHandler)
+                cityDataReader,
+                new CityChart(cityDataReader.getDataset(), this, this.skinHandler)
         ));
 
-        currentDataReader = new CountryDataReader();
+        Thread t = new Thread(() -> {
+            try {
+                this.backgroundInit();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                Platform.runLater(() -> {
+                    for (int i = 0; i < this.listeners.size(); i++) {
+                        this.listeners.get(i).onReady();
+                    }
+                });
+            }
+        });
+
+        t.start();
+    }
+
+    /**
+     * Add a listener for when the files
+     * are ready.
+     *
+     * @param listener The listener.
+     */
+    public void addOnReadyListener(Listener listener) {
+        this.listeners.add(listener);
+    }
+
+    private void backgroundInit() throws IOException {
+        DataReader currentDataReader = new CountryDataReader();
         this.correspondences.put(DataType.COUNTRY, new Correspondence(
                 currentDataReader,
                 new CountryChart(currentDataReader.getDataset(), this, this.skinHandler)
@@ -122,5 +155,10 @@ public class DataHandler {
     }
 
     public record Correspondence(DataReader dataReader,
-                                 Chart chart) {}
+                                 Chart chart) {
+    }
+
+    public interface Listener {
+        void onReady();
+    }
 }

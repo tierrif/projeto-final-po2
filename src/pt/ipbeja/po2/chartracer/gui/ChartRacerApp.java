@@ -32,11 +32,13 @@ import java.io.IOException;
 import java.nio.file.NoSuchFileException;
 import java.util.List;
 
-public class ChartRacerApp extends Application implements SkinHandler.Listener {
+public class ChartRacerApp extends Application
+        implements SkinHandler.Listener, DataHandler.Listener {
     private DataHandler handler;
     private VBox mainBox;
     private Scene scene;
     private SkinHandler skinHandler;
+    private MenuBar menuBar;
 
     public static void main(String[] args) {
         launch(args);
@@ -54,6 +56,7 @@ public class ChartRacerApp extends Application implements SkinHandler.Listener {
         this.skinHandler = new SkinHandler();
         this.skinHandler.addOnSkinChangeListener(this);
         this.handler = new DataHandler(this.skinHandler);
+        this.handler.addOnReadyListener(this);
         try {
             this.handler.initialize();
         } catch (NoSuchFileException e) {
@@ -63,11 +66,11 @@ public class ChartRacerApp extends Application implements SkinHandler.Listener {
             alert.showAndWait();
         }
         this.mainBox = new VBox();
-        MenuBar menuBar = this.createMenu();
-        Chart chart = this.handler.getCorrespondence(DataHandler.DataType.ENDGAME).chart();
+        this.menuBar = this.createMenu();
+        Chart chart = this.handler.getCorrespondence(DataHandler.DataType.CITY).chart();
         this.skinHandler.addOnSkinChangeListener(chart);
         chart.start();
-        mainBox.getChildren().addAll(menuBar, chart);
+        mainBox.getChildren().addAll(this.menuBar, chart);
         this.scene = new Scene(mainBox);
         this.scene.setFill(this.skinHandler.current().background());
 
@@ -102,14 +105,7 @@ public class ChartRacerApp extends Application implements SkinHandler.Listener {
 
         Menu chart = new Menu("Chart");
         Menu currentChart = new Menu("Current Chart");
-        List<DataHandler.DataType> types = this.handler.getAllDataTypes();
-        for (int i = 0; i < types.size(); i++) {
-            DataHandler.DataType type = types.get(i);
-            CheckMenuItem item = new CheckMenuItem(
-                    Util.capitalize(type.toString()));
-            item.setOnAction(new FileMenuSelectionListener(type, currentChart, this));
-            currentChart.getItems().add(item);
-        }
+        this.generateChartMenu(currentChart);
 
         chart.getItems().add(currentChart);
         MenuItem restart = new MenuItem("Restart Chart");
@@ -134,5 +130,24 @@ public class ChartRacerApp extends Application implements SkinHandler.Listener {
                 null
         )));
         //this.scene.setFill(newSkin.background());
+    }
+
+    @Override
+    public void onReady() {
+        Menu currentChart = (Menu) this.menuBar.getMenus()
+                .get(0).getItems().get(0);
+        this.generateChartMenu(currentChart);
+    }
+
+    private void generateChartMenu(Menu currentChart) {
+        currentChart.getItems().clear();
+        List<DataHandler.DataType> types = this.handler.getAllDataTypes();
+        for (int i = 0; i < types.size(); i++) {
+            DataHandler.DataType type = types.get(i);
+            CheckMenuItem item = new CheckMenuItem(
+                    Util.capitalize(type.toString()));
+            item.setOnAction(new FileMenuSelectionListener(type, currentChart, this));
+            currentChart.getItems().add(item);
+        }
     }
 }
