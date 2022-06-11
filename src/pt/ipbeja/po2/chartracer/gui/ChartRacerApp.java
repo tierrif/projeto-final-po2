@@ -14,12 +14,17 @@ import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import pt.ipbeja.po2.chartracer.gui.chart.Chart;
 import pt.ipbeja.po2.chartracer.gui.listeners.FileMenuSelectionListener;
 import pt.ipbeja.po2.chartracer.gui.listeners.RestartChartListener;
 import pt.ipbeja.po2.chartracer.model.DataHandler;
+import pt.ipbeja.po2.chartracer.model.skins.ChartSkin;
+import pt.ipbeja.po2.chartracer.model.skins.SkinHandler;
+import pt.ipbeja.po2.chartracer.model.skins.SkinMenuItem;
 import pt.ipbeja.po2.chartracer.model.util.Constants;
 import pt.ipbeja.po2.chartracer.model.util.Util;
 
@@ -27,9 +32,11 @@ import java.io.IOException;
 import java.nio.file.NoSuchFileException;
 import java.util.List;
 
-public class ChartRacerApp extends Application {
+public class ChartRacerApp extends Application implements SkinHandler.Listener {
     private DataHandler handler;
     private VBox mainBox;
+    private Scene scene;
+    private SkinHandler skinHandler;
 
     public static void main(String[] args) {
         launch(args);
@@ -44,7 +51,9 @@ public class ChartRacerApp extends Application {
      */
     @Override
     public void start(Stage primaryStage) throws IOException {
-        this.handler = new DataHandler();
+        this.skinHandler = new SkinHandler();
+        this.skinHandler.addOnSkinChangeListener(this);
+        this.handler = new DataHandler(this.skinHandler);
         try {
             this.handler.initialize();
         } catch (NoSuchFileException e) {
@@ -56,11 +65,13 @@ public class ChartRacerApp extends Application {
         this.mainBox = new VBox();
         MenuBar menuBar = this.createMenu();
         Chart chart = this.handler.getCorrespondence(DataHandler.DataType.ENDGAME).chart();
+        this.skinHandler.addOnSkinChangeListener(chart);
         chart.start();
         mainBox.getChildren().addAll(menuBar, chart);
-        Scene scene = new Scene(mainBox);
+        this.scene = new Scene(mainBox);
+        this.scene.setFill(this.skinHandler.current().background());
 
-        primaryStage.setScene(scene);
+        primaryStage.setScene(this.scene);
         primaryStage.setMinWidth(Constants.WINDOW_WIDTH);
         primaryStage.setMinHeight(Constants.WINDOW_HEIGHT);
         primaryStage.show();
@@ -107,11 +118,21 @@ public class ChartRacerApp extends Application {
         menu.getMenus().add(chart);
 
         Menu skins = new Menu("Skin");
-        CheckMenuItem item = new CheckMenuItem("Classic");
-        skins.getItems().add(item);
+        skins.getItems().addAll(this.skinHandler.getAllSkins()
+                .stream().map((skin) -> (SkinMenuItem) skin).toList());
 
         menu.getMenus().add(skins);
 
         return menu;
+    }
+
+    @Override
+    public void onSkinChange(ChartSkin newSkin) {
+        this.mainBox.setBackground(new Background(new BackgroundFill(
+                newSkin.background(),
+                null,
+                null
+        )));
+        //this.scene.setFill(newSkin.background());
     }
 }

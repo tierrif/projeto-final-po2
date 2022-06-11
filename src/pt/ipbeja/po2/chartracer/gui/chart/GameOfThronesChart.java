@@ -13,12 +13,13 @@ import javafx.scene.paint.Color;
 import pt.ipbeja.po2.chartracer.gui.bar.Bar;
 import pt.ipbeja.po2.chartracer.model.ChartDataset;
 import pt.ipbeja.po2.chartracer.model.DataHandler;
+import pt.ipbeja.po2.chartracer.model.skins.SkinHandler;
 import pt.ipbeja.po2.chartracer.model.types.BarModel;
 import pt.ipbeja.po2.chartracer.model.types.GameOfThrones;
 
 public class GameOfThronesChart extends Chart {
-    public GameOfThronesChart(ChartDataset dataset, DataHandler handler) {
-        super(dataset, handler);
+    public GameOfThronesChart(ChartDataset dataset, DataHandler handler, SkinHandler skinHandler) {
+        super(dataset, handler, skinHandler);
     }
 
     /**
@@ -32,12 +33,13 @@ public class GameOfThronesChart extends Chart {
      * @return The generated Bar pane to directly add into the Chart Pane.
      */
     @Override
-    public Bar generateBar(int width, BarModel model, Color assignedColor) {
+    public Bar generateBar(int width, BarModel model, Color assignedColor, SkinHandler skin) {
         GameOfThrones gameOfThrones = (GameOfThrones) model;
         return new Bar(width,
                 gameOfThrones.getPopularity(),
                 gameOfThrones.getCharacter(),
-                assignedColor
+                assignedColor,
+                skin
         );
     }
 }

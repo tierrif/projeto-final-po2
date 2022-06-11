@@ -13,13 +13,14 @@ import javafx.scene.paint.Color;
 import pt.ipbeja.po2.chartracer.gui.bar.Bar;
 import pt.ipbeja.po2.chartracer.model.ChartDataset;
 import pt.ipbeja.po2.chartracer.model.DataHandler;
+import pt.ipbeja.po2.chartracer.model.skins.SkinHandler;
 import pt.ipbeja.po2.chartracer.model.types.BarModel;
 import pt.ipbeja.po2.chartracer.model.types.EndGame;
 import pt.ipbeja.po2.chartracer.model.types.GameOfThrones;
 
 public class EndGameChart extends Chart {
-    public EndGameChart(ChartDataset dataset, DataHandler handler) {
-        super(dataset, handler);
+    public EndGameChart(ChartDataset dataset, DataHandler handler, SkinHandler skinHandler) {
+        super(dataset, handler, skinHandler);
     }
 
     /**
@@ -33,12 +34,13 @@ public class EndGameChart extends Chart {
      * @return The generated Bar pane to directly add into the Chart Pane.
      */
     @Override
-    public Bar generateBar(int width, BarModel model, Color assignedColor) {
+    public Bar generateBar(int width, BarModel model, Color assignedColor, SkinHandler skin) {
         EndGame endGame = (EndGame) model;
         return new Bar(width,
                 endGame.getPopularity(),
                 endGame.getCharacter(),
-                assignedColor
+                assignedColor,
+                skin
         );
     }
 }

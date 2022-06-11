@@ -14,12 +14,13 @@ import javafx.scene.paint.Color;
 import pt.ipbeja.po2.chartracer.gui.bar.Bar;
 import pt.ipbeja.po2.chartracer.model.ChartDataset;
 import pt.ipbeja.po2.chartracer.model.DataHandler;
+import pt.ipbeja.po2.chartracer.model.skins.SkinHandler;
 import pt.ipbeja.po2.chartracer.model.types.BarModel;
 import pt.ipbeja.po2.chartracer.model.types.Country;
 
 public class CountryChart extends Chart {
-    public CountryChart(ChartDataset dataset, DataHandler handler) {
-        super(dataset, handler);
+    public CountryChart(ChartDataset dataset, DataHandler handler, SkinHandler skinHandler) {
+        super(dataset, handler, skinHandler);
     }
 
     /**
@@ -33,12 +34,13 @@ public class CountryChart extends Chart {
      * @return The generated Bar pane to directly add into the Chart Pane.
      */
     @Override
-    public Bar generateBar(int width, BarModel model, Color assignedColor) {
+    public Bar generateBar(int width, BarModel model, Color assignedColor, SkinHandler skin) {
         Country country = (Country) model;
         return new Bar(width,
                 country.getPopulation(),
                 country.getCountryName(),
-                assignedColor
+                assignedColor,
+                skin
         );
     }
 }

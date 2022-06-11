@@ -19,6 +19,9 @@ import javafx.scene.text.*;
 import pt.ipbeja.po2.chartracer.gui.bar.Bar;
 import pt.ipbeja.po2.chartracer.model.ChartDataset;
 import pt.ipbeja.po2.chartracer.model.DataHandler;
+import pt.ipbeja.po2.chartracer.model.skins.ChartSkin;
+import pt.ipbeja.po2.chartracer.model.skins.SkinHandler;
+import pt.ipbeja.po2.chartracer.model.skins.TextStyle;
 import pt.ipbeja.po2.chartracer.model.types.BarModel;
 import pt.ipbeja.po2.chartracer.model.util.Constants;
 import pt.ipbeja.po2.chartracer.model.util.Util;
@@ -27,12 +30,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public abstract class Chart extends StackPane {
+public abstract class Chart extends StackPane implements SkinHandler.Listener {
     private final ChartDataset dataset;
     private final Map<String, Color> colors;
     private Thread animationThread;
     private boolean isRunning;
-    private final DataHandler handler;
+    private final DataHandler dataHandler;
+    private final SkinHandler skin;
+    private VBox chartBox;
 
     /**
      * Create a full Chart pane for this
@@ -41,10 +46,11 @@ public abstract class Chart extends StackPane {
      *
      * @param dataset The dataset to work with.
      */
-    public Chart(ChartDataset dataset, DataHandler handler) {
+    public Chart(ChartDataset dataset, DataHandler dataHandler, SkinHandler skin) {
         this.dataset = dataset;
         this.colors = new HashMap<>();
-        this.handler = handler;
+        this.dataHandler = dataHandler;
+        this.skin = skin;
     }
 
     /**
@@ -54,7 +60,7 @@ public abstract class Chart extends StackPane {
      */
     public void start() {
         this.isRunning = true;
-        this.handler.setCurrentRunningChart(this);
+        this.dataHandler.setCurrentRunningChart(this);
         this.createChart(dataset.firstChart());
         this.startAnimation();
     }
@@ -71,7 +77,8 @@ public abstract class Chart extends StackPane {
      */
     public abstract Bar generateBar(int width,
                                     BarModel model,
-                                    Color assignedColor
+                                    Color assignedColor,
+                                    SkinHandler skin
     );
 
     /**
@@ -103,6 +110,19 @@ public abstract class Chart extends StackPane {
         this.isRunning = running;
     }
 
+    @Override
+    public void onSkinChange(ChartSkin newSkin) {
+        List<Bar> barList = this.chartBox.getChildren().stream().skip(2)
+                .map((child) -> (Bar) child).toList();
+        colors.clear();
+
+        for (int i = 0; i < barList.size(); i++) {
+            Color color = Util.randomColor(newSkin.colorList());
+            colors.put(barList.get(i).getName(), color);
+            barList.get(i).getBarRectangle().setFill(color);
+        }
+    }
+
     /**
      * Create a chart with a list of bar models from
      * the dataset. This counts as a frame.
@@ -113,20 +133,22 @@ public abstract class Chart extends StackPane {
     private void createChart(List<BarModel> currentChart) {
         this.getChildren().clear();
 
-        VBox chartBox = new VBox();
-        chartBox.getChildren().addAll(this.createTitle(), this.createPopulationLabel());
+        this.chartBox = new VBox();
+        this.chartBox.getChildren().addAll(this.createTitle(), this.createPopulationLabel());
         BarModel firstModel = currentChart.get(0);
 
         String iteration = currentChart.get(0).correspondingIteration();
         for (int i = 0; i < currentChart.size(); i++) {
             if (colors.get(currentChart.get(i).identifier()) == null) {
-                colors.put(currentChart.get(i).identifier(), Util.randomColor());
+                colors.put(currentChart.get(i).identifier(),
+                        Util.randomColor(this.skin.current().colorList()));
             }
-            chartBox.getChildren().add(this.generateBar(
+            this.chartBox.getChildren().add(this.generateBar(
                     this.calculateWidth(firstModel.correspondingValue(),
                             currentChart.get(i).correspondingValue()),
                     currentChart.get(i),
-                    colors.get(currentChart.get(i).identifier())
+                    colors.get(currentChart.get(i).identifier()),
+                    this.skin
             ));
         }
 
@@ -137,9 +159,9 @@ public abstract class Chart extends StackPane {
         );
         bottomRightInfo.setAlignment(Pos.BOTTOM_RIGHT);
         StackPane.setAlignment(bottomRightInfo, Pos.BOTTOM_RIGHT);
-        StackPane.setMargin(bottomRightInfo, new Insets(50));
+        StackPane.setMargin(bottomRightInfo, new Insets(25));
 
-        this.getChildren().addAll(chartBox, bottomRightInfo);
+        this.getChildren().addAll(this.chartBox, bottomRightInfo);
     }
 
     /**
@@ -178,7 +200,11 @@ public abstract class Chart extends StackPane {
     private Text createTitle() {
         Text title = new Text(this.dataset.title());
         title.setTextAlignment(TextAlignment.CENTER);
-        title.setFont(Font.font("Arial", FontWeight.BOLD, FontPosture.REGULAR, 24));
+
+        TextStyle style = this.skin.current().titleFont();
+        title.setFont(style.font());
+        title.setFill(style.fill());
+
         title.setWrappingWidth(Constants.INNER_WIDTH);
         VBox.setMargin(title, new Insets(5));
 
@@ -194,8 +220,11 @@ public abstract class Chart extends StackPane {
     private Text createPopulationLabel() {
         Text populationLabel = new Text(this.dataset.population());
         populationLabel.setTextAlignment(TextAlignment.LEFT);
-        populationLabel.setFont(Font.font("Arial", FontWeight.BOLD, FontPosture.REGULAR, 14));
-        populationLabel.setFill(Color.GRAY);
+
+        TextStyle style = this.skin.current().populationFont();
+        populationLabel.setFont(style.font());
+        populationLabel.setFill(style.fill());
+
         populationLabel.setWrappingWidth(Constants.INNER_WIDTH);
         VBox.setMargin(populationLabel, new Insets(5));
 
@@ -214,8 +243,11 @@ public abstract class Chart extends StackPane {
     private Text createIterationText(String iteration) {
         Text iterationText = new Text(iteration);
         iterationText.setTextAlignment(TextAlignment.RIGHT);
-        iterationText.setFont(Font.font("Arial", FontWeight.BOLD, FontPosture.REGULAR, 100));
-        iterationText.setFill(Color.GRAY);
+
+        TextStyle style = this.skin.current().iterFont();
+        iterationText.setFont(style.font());
+        iterationText.setFill(style.fill());
+
         iterationText.setWrappingWidth(Constants.INNER_WIDTH);
 
         return iterationText;
@@ -230,8 +262,11 @@ public abstract class Chart extends StackPane {
     private Text createSourceText() {
         Text source = new Text(this.dataset.source());
         source.setTextAlignment(TextAlignment.RIGHT);
-        source.setFont(Font.font("Arial", FontWeight.BOLD, FontPosture.REGULAR, 14));
-        source.setFill(Color.GRAY);
+
+        TextStyle style = this.skin.current().srcFont();
+        source.setFont(style.font());
+        source.setFill(style.fill());
+
         source.setWrappingWidth(Constants.INNER_WIDTH);
 
         return source;

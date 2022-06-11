@@ -15,19 +15,20 @@ public class Util {
     private static int previous;
 
     /**
-     * Get a random color from the COLOR_LIST
-     * constant, saved in Constants.
+     * Get a random color from a provided color
+     * array. Repeat-safe.
      *
-     * @return A random color from the COLOR_LIST constant.
+     * @param colors An array of colors to randomize from.
+     * @return A random color from the provided color array.
      */
-    public static Color randomColor() {
+    public static Color randomColor(Color[] colors) {
         int index;
         do {
             index = randomIndex(4);
         } while (index == previous);
         previous = index;
 
-        return Constants.COLOR_LIST[index];
+        return colors[index];
     }
 
     /**

@@ -52,7 +52,7 @@ public class Country extends BarModel {
 
     @Override
     public int animationDelay() {
-        return 80;
+        return 50;
     }
 
     public String getDate() {

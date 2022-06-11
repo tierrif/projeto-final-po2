@@ -131,7 +131,7 @@ public abstract class DataReader {
 
         return finalList.stream().map((chart) -> chart.stream()
                 .sorted(Comparator.reverseOrder()).toList() // Sort the datasets.
-                .subList(0, Math.min(chart.size(), 8))).toList();
+                .subList(0, Math.min(chart.size(), 12))).toList();
     }
 
     /**

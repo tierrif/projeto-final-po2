@@ -61,6 +61,7 @@ public class FileMenuSelectionListener implements EventHandler<ActionEvent> {
         }
 
         currentChart.getAnimationThread().stop();
+        currentChart.setRunning(false);
         this.app.changeCharts(chart);
         chart.start();
     }

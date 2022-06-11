@@ -11,6 +11,7 @@ package pt.ipbeja.po2.chartracer.model;
 
 import pt.ipbeja.po2.chartracer.gui.chart.*;
 import pt.ipbeja.po2.chartracer.model.readers.*;
+import pt.ipbeja.po2.chartracer.model.skins.SkinHandler;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -20,9 +21,11 @@ import java.util.Map;
 public class DataHandler {
     private final Map<DataType, Correspondence> correspondences;
     private Chart currentRunningChart;
+    private SkinHandler skinHandler;
 
-    public DataHandler() {
+    public DataHandler(SkinHandler skinHandler) {
         this.correspondences = new HashMap<>();
+        this.skinHandler = skinHandler;
     }
 
     /**
@@ -43,25 +46,25 @@ public class DataHandler {
         DataReader currentDataReader = new CityDataReader();
         this.correspondences.put(DataType.CITY, new Correspondence(
            currentDataReader,
-           new CityChart(currentDataReader.getDataset(), this)
+           new CityChart(currentDataReader.getDataset(), this, this.skinHandler)
         ));
 
         currentDataReader = new CountryDataReader();
         this.correspondences.put(DataType.COUNTRY, new Correspondence(
                 currentDataReader,
-                new CountryChart(currentDataReader.getDataset(), this)
+                new CountryChart(currentDataReader.getDataset(), this, this.skinHandler)
         ));
 
         currentDataReader = new GameOfThronesDataReader();
         this.correspondences.put(DataType.GAME_OF_THRONES, new Correspondence(
                 currentDataReader,
-                new GameOfThronesChart(currentDataReader.getDataset(), this)
+                new GameOfThronesChart(currentDataReader.getDataset(), this, this.skinHandler)
         ));
 
         currentDataReader = new EndGameDataReader();
         this.correspondences.put(DataType.ENDGAME, new Correspondence(
                 currentDataReader,
-                new EndGameChart(currentDataReader.getDataset(), this)
+                new EndGameChart(currentDataReader.getDataset(), this, this.skinHandler)
         ));
     }
 
