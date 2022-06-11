@@ -68,7 +68,6 @@ public class ChartRacerApp extends Application
         this.mainBox = new VBox();
         this.menuBar = this.createMenu();
         Chart chart = this.handler.getCorrespondence(DataHandler.DataType.CITY).chart();
-        this.skinHandler.addOnSkinChangeListener(chart);
         chart.start();
         mainBox.getChildren().addAll(this.menuBar, chart);
         this.scene = new Scene(mainBox);

@@ -112,14 +112,17 @@ public abstract class Chart extends StackPane implements SkinHandler.Listener {
 
     @Override
     public void onSkinChange(ChartSkin newSkin) {
+        if (this.chartBox == null) return;
         List<Bar> barList = this.chartBox.getChildren().stream().skip(2)
                 .map((child) -> (Bar) child).toList();
         colors.clear();
 
         for (int i = 0; i < barList.size(); i++) {
+            Bar bar = barList.get(i);
             Color color = Util.randomColor(newSkin.colorList());
-            colors.put(barList.get(i).getName(), color);
-            barList.get(i).getBarRectangle().setFill(color);
+            colors.put(bar.getName(), color);
+
+            bar.setColor(color);
         }
     }
 

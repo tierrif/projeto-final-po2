@@ -49,9 +49,11 @@ public class DataHandler {
     public void initialize() throws IOException {
         // Default.
         DataReader cityDataReader = new CityDataReader();
+        Chart cityChart = new CityChart(cityDataReader.getDataset(), this, this.skinHandler);
+        this.skinHandler.addOnSkinChangeListener(cityChart);
         this.correspondences.put(DataType.CITY, new Correspondence(
                 cityDataReader,
-                new CityChart(cityDataReader.getDataset(), this, this.skinHandler)
+                cityChart
         ));
 
         Thread t = new Thread(() -> {
@@ -83,21 +85,30 @@ public class DataHandler {
 
     private void backgroundInit() throws IOException {
         DataReader currentDataReader = new CountryDataReader();
+        Chart currentChart = new CountryChart(currentDataReader.getDataset(),
+                this, this.skinHandler);
+        this.skinHandler.addOnSkinChangeListener(currentChart);
         this.correspondences.put(DataType.COUNTRY, new Correspondence(
                 currentDataReader,
-                new CountryChart(currentDataReader.getDataset(), this, this.skinHandler)
+                currentChart
         ));
 
         currentDataReader = new GameOfThronesDataReader();
+        currentChart = new GameOfThronesChart(currentDataReader.getDataset(),
+                this, this.skinHandler);
+        this.skinHandler.addOnSkinChangeListener(currentChart);
         this.correspondences.put(DataType.GAME_OF_THRONES, new Correspondence(
                 currentDataReader,
-                new GameOfThronesChart(currentDataReader.getDataset(), this, this.skinHandler)
+                currentChart
         ));
 
         currentDataReader = new EndGameDataReader();
+        currentChart = new EndGameChart(currentDataReader.getDataset(),
+                this, this.skinHandler);
+        this.skinHandler.addOnSkinChangeListener(currentChart);
         this.correspondences.put(DataType.ENDGAME, new Correspondence(
                 currentDataReader,
-                new EndGameChart(currentDataReader.getDataset(), this, this.skinHandler)
+                currentChart
         ));
     }
 

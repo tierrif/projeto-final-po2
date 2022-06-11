@@ -77,8 +77,15 @@ public class Bar extends StackPane {
         this.setAlignment(Pos.CENTER_LEFT);
     }
 
-    public Rectangle getBarRectangle() {
-        return this.barRectangle;
+    /**
+     * Change the color of this bar.
+     *
+     * @param color The new color.
+     */
+    public void setColor(Color color) {
+        this.color = color;
+        this.getChildren().clear();
+        this.createBar();
     }
 
     /**

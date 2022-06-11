@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import pt.ipbeja.po2.chartracer.model.ChartDataset;
 import pt.ipbeja.po2.chartracer.model.readers.CityDataReader;
 import pt.ipbeja.po2.chartracer.model.readers.DataReader;
+import pt.ipbeja.po2.chartracer.model.readers.GameOfThronesDataReader;
 import pt.ipbeja.po2.chartracer.model.types.BarModel;
 import pt.ipbeja.po2.chartracer.model.util.Constants;
 import pt.ipbeja.po2.chartracer.model.util.Util;
@@ -84,5 +85,11 @@ class DataReaderTest {
     @Test
     void capitalizetTest() {
         System.out.println(Util.capitalize("GAME_OF_THRONES"));
+    }
+
+    @Test
+    void gameOfThronesTest() throws IOException {
+        DataReader reader = new GameOfThronesDataReader();
+        System.out.println(reader.getDataset().barList().size());
     }
 }
