@@ -7,30 +7,30 @@
  *
  * @author Tierri Ferreira <22897@stu.ipbeja.pt>
  */
-package pt.ipbeja.po2.chartracer.model.skins;
+package pt.ipbeja.po2.chartracer.gui.skins;
 
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 
-public class ClassicSkin extends SkinMenuItem {
-    public ClassicSkin(SkinHandler handler) {
+public class DarkModeSkin extends SkinMenuItem {
+    public DarkModeSkin(SkinHandler handler) {
         super(handler);
     }
 
     @Override
     public String name() {
-        return "classic";
+        return "dark_mode";
     }
 
     @Override
     public Color[] colorList() {
         return new Color[]{
-                Color.rgb(160, 193, 233),
-                Color.rgb(198, 144, 136),
-                Color.rgb(216, 220, 131),
-                Color.rgb(194, 165, 211),
+                Color.rgb(84, 102, 125),
+                Color.rgb(117, 64, 56),
+                Color.rgb(159, 163, 59),
+                Color.rgb(100, 75, 115),
         };
     }
 
@@ -38,7 +38,7 @@ public class ClassicSkin extends SkinMenuItem {
     public TextStyle iterFont() {
         return new TextStyle(
                 Font.font("Arial", FontWeight.BOLD, FontPosture.REGULAR, 100),
-                Color.GRAY
+                Color.LIGHTGRAY
         );
     }
 
@@ -46,7 +46,7 @@ public class ClassicSkin extends SkinMenuItem {
     public TextStyle srcFont() {
         return new TextStyle(
                 Font.font("Arial", FontWeight.BOLD, FontPosture.REGULAR, 14),
-                Color.GRAY
+                Color.LIGHTGRAY
         );
     }
 
@@ -54,7 +54,7 @@ public class ClassicSkin extends SkinMenuItem {
     public TextStyle titleFont() {
         return new TextStyle(
                 Font.font("Arial", FontWeight.BOLD, FontPosture.REGULAR, 24),
-                Color.BLACK
+                Color.WHITE
         );
     }
 
@@ -62,7 +62,7 @@ public class ClassicSkin extends SkinMenuItem {
     public TextStyle populationFont() {
         return new TextStyle(
                 Font.font("Arial", FontWeight.BOLD, FontPosture.REGULAR, 14),
-                Color.GRAY
+                Color.LIGHTGRAY
         );
     }
 
@@ -70,7 +70,7 @@ public class ClassicSkin extends SkinMenuItem {
     public TextStyle barValueFont() {
         return new TextStyle(
                 Font.font("Arial", FontWeight.LIGHT, FontPosture.REGULAR, 14),
-                Color.BLACK
+                Color.WHITE
         );
     }
 
@@ -78,12 +78,12 @@ public class ClassicSkin extends SkinMenuItem {
     public TextStyle barNameFont() {
         return new TextStyle(
                 Font.font("Arial", FontWeight.BOLD, FontPosture.REGULAR, 14),
-                Color.BLACK
+                Color.WHITE
         );
     }
 
     @Override
     public Color background() {
-        return Color.WHITE;
+        return Color.rgb(46, 46, 46);
     }
 }

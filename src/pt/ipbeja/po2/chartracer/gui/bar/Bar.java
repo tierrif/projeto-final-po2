@@ -16,8 +16,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
-import pt.ipbeja.po2.chartracer.model.skins.SkinHandler;
-import pt.ipbeja.po2.chartracer.model.skins.TextStyle;
+import pt.ipbeja.po2.chartracer.gui.skins.SkinHandler;
+import pt.ipbeja.po2.chartracer.gui.skins.TextStyle;
 import pt.ipbeja.po2.chartracer.model.util.Constants;
 
 public class Bar extends StackPane {

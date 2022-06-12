@@ -12,7 +12,7 @@ package pt.ipbeja.po2.chartracer.model;
 import javafx.application.Platform;
 import pt.ipbeja.po2.chartracer.gui.chart.*;
 import pt.ipbeja.po2.chartracer.model.readers.*;
-import pt.ipbeja.po2.chartracer.model.skins.SkinHandler;
+import pt.ipbeja.po2.chartracer.gui.skins.SkinHandler;
 
 import java.io.IOException;
 import java.util.ArrayList;

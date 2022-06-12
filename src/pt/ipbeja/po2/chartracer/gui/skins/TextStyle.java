@@ -7,7 +7,7 @@
  *
  * @author Tierri Ferreira <22897@stu.ipbeja.pt>
  */
-package pt.ipbeja.po2.chartracer.model.skins;
+package pt.ipbeja.po2.chartracer.gui.skins;
 
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;

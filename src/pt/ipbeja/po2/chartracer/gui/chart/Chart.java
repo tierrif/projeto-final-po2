@@ -19,9 +19,9 @@ import javafx.scene.text.*;
 import pt.ipbeja.po2.chartracer.gui.bar.Bar;
 import pt.ipbeja.po2.chartracer.model.ChartDataset;
 import pt.ipbeja.po2.chartracer.model.DataHandler;
-import pt.ipbeja.po2.chartracer.model.skins.ChartSkin;
-import pt.ipbeja.po2.chartracer.model.skins.SkinHandler;
-import pt.ipbeja.po2.chartracer.model.skins.TextStyle;
+import pt.ipbeja.po2.chartracer.gui.skins.ChartSkin;
+import pt.ipbeja.po2.chartracer.gui.skins.SkinHandler;
+import pt.ipbeja.po2.chartracer.gui.skins.TextStyle;
 import pt.ipbeja.po2.chartracer.model.types.BarModel;
 import pt.ipbeja.po2.chartracer.model.util.Constants;
 import pt.ipbeja.po2.chartracer.model.util.Util;
@@ -38,6 +38,7 @@ public abstract class Chart extends StackPane implements SkinHandler.Listener {
     private final DataHandler dataHandler;
     private final SkinHandler skin;
     private VBox chartBox;
+    private VBox bottomRightInfo;
 
     /**
      * Create a full Chart pane for this
@@ -82,6 +83,14 @@ public abstract class Chart extends StackPane implements SkinHandler.Listener {
     );
 
     /**
+     * Get the type that corresponds to this
+     * chart.
+     *
+     * @return The type that corresponds to this chart.
+     */
+    public abstract DataHandler.DataType getType();
+
+    /**
      * Get the current animation thread.
      *
      * @return The current animation thread or null
@@ -113,6 +122,14 @@ public abstract class Chart extends StackPane implements SkinHandler.Listener {
     @Override
     public void onSkinChange(ChartSkin newSkin) {
         if (this.chartBox == null) return;
+        this.chartBox.getChildren().set(0, this.createTitle());
+        this.chartBox.getChildren().set(1, this.createPopulationLabel());
+
+        Text iteration = (Text) this.bottomRightInfo.getChildren().get(0);
+        this.bottomRightInfo.getChildren().set(0,
+                this.createIterationText(iteration.getText()));
+        this.bottomRightInfo.getChildren().set(1, this.createSourceText());
+
         List<Bar> barList = this.chartBox.getChildren().stream().skip(2)
                 .map((child) -> (Bar) child).toList();
         colors.clear();
@@ -155,7 +172,7 @@ public abstract class Chart extends StackPane implements SkinHandler.Listener {
             ));
         }
 
-        VBox bottomRightInfo = new VBox();
+        this.bottomRightInfo = new VBox();
         bottomRightInfo.getChildren().addAll(
                 this.createIterationText(iteration),
                 this.createSourceText()

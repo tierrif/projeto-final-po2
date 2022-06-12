@@ -7,7 +7,7 @@
  *
  * @author Tierri Ferreira <22897@stu.ipbeja.pt>
  */
-package pt.ipbeja.po2.chartracer.model.skins;
+package pt.ipbeja.po2.chartracer.gui.skins;
 
 import pt.ipbeja.po2.chartracer.model.util.Constants;
 
@@ -79,6 +79,7 @@ public class SkinHandler {
     private void registerAllSkins() {
         this.registerSkin(new ClassicSkin(this));
         this.registerSkin(new DarkModeSkin(this));
+        this.registerSkin(new MinimalSkin(this));
     }
 
     private void registerSkin(ChartSkin skin) {

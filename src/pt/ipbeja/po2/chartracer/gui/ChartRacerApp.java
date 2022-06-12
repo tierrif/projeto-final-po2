@@ -22,9 +22,9 @@ import pt.ipbeja.po2.chartracer.gui.chart.Chart;
 import pt.ipbeja.po2.chartracer.gui.listeners.FileMenuSelectionListener;
 import pt.ipbeja.po2.chartracer.gui.listeners.RestartChartListener;
 import pt.ipbeja.po2.chartracer.model.DataHandler;
-import pt.ipbeja.po2.chartracer.model.skins.ChartSkin;
-import pt.ipbeja.po2.chartracer.model.skins.SkinHandler;
-import pt.ipbeja.po2.chartracer.model.skins.SkinMenuItem;
+import pt.ipbeja.po2.chartracer.gui.skins.ChartSkin;
+import pt.ipbeja.po2.chartracer.gui.skins.SkinHandler;
+import pt.ipbeja.po2.chartracer.gui.skins.SkinMenuItem;
 import pt.ipbeja.po2.chartracer.model.util.Constants;
 import pt.ipbeja.po2.chartracer.model.util.Util;
 
@@ -79,6 +79,13 @@ public class ChartRacerApp extends Application
         primaryStage.show();
     }
 
+    @Override
+    public void stop() {
+        System.out.println("Stopping...");
+        // Stop all threads.
+        System.exit(0);
+    }
+
     /**
      * Change the current chart.
      *
@@ -128,7 +135,6 @@ public class ChartRacerApp extends Application
                 null,
                 null
         )));
-        //this.scene.setFill(newSkin.background());
     }
 
     @Override
@@ -145,6 +151,7 @@ public class ChartRacerApp extends Application
             DataHandler.DataType type = types.get(i);
             CheckMenuItem item = new CheckMenuItem(
                     Util.capitalize(type.toString()));
+            if (type == DataHandler.DataType.CITY) item.setSelected(true);
             item.setOnAction(new FileMenuSelectionListener(type, currentChart, this));
             currentChart.getItems().add(item);
         }

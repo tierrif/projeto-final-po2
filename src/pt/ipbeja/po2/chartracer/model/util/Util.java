@@ -22,9 +22,10 @@ public class Util {
      * @return A random color from the provided color array.
      */
     public static Color randomColor(Color[] colors) {
+        if (colors.length == 1) return colors[0];
         int index;
         do {
-            index = randomIndex(4);
+            index = randomIndex(colors.length);
         } while (index == previous);
         previous = index;
 

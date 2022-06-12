@@ -13,7 +13,7 @@ import javafx.scene.paint.Color;
 import pt.ipbeja.po2.chartracer.gui.bar.Bar;
 import pt.ipbeja.po2.chartracer.model.ChartDataset;
 import pt.ipbeja.po2.chartracer.model.DataHandler;
-import pt.ipbeja.po2.chartracer.model.skins.SkinHandler;
+import pt.ipbeja.po2.chartracer.gui.skins.SkinHandler;
 import pt.ipbeja.po2.chartracer.model.types.BarModel;
 import pt.ipbeja.po2.chartracer.model.types.GameOfThrones;
 
@@ -41,5 +41,10 @@ public class GameOfThronesChart extends Chart {
                 assignedColor,
                 skin
         );
+    }
+
+    @Override
+    public DataHandler.DataType getType() {
+        return DataHandler.DataType.GAME_OF_THRONES;
     }
 }

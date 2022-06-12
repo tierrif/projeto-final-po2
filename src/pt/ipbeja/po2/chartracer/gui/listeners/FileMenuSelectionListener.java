@@ -19,6 +19,7 @@ import javafx.scene.control.Menu;
 import pt.ipbeja.po2.chartracer.gui.ChartRacerApp;
 import pt.ipbeja.po2.chartracer.gui.chart.Chart;
 import pt.ipbeja.po2.chartracer.model.DataHandler;
+import pt.ipbeja.po2.chartracer.model.util.Util;
 
 public class FileMenuSelectionListener implements EventHandler<ActionEvent> {
     private final DataHandler.DataType type;
@@ -33,14 +34,12 @@ public class FileMenuSelectionListener implements EventHandler<ActionEvent> {
 
     @Override
     public void handle(ActionEvent actionEvent) {
-        fileMenu.getItems().stream()
-                .map((item) -> ((CheckMenuItem) item))
-                .filter(CheckMenuItem::isSelected)
-                .forEach((item) -> item.setSelected(false));
-
         Chart chart = this.app.getHandler().getCorrespondence(type).chart();
         Chart currentChart = this.app.getHandler().getCurrentRunningChart();
+        this.deselectNonRunningCharts(currentChart);
+
         if (chart.isRunning()) {
+            this.setChartItemSelected(currentChart);
             Alert alert = new Alert(Alert.AlertType.ERROR,
                     "This chart is already running.",
                     ButtonType.OK);
@@ -62,7 +61,26 @@ public class FileMenuSelectionListener implements EventHandler<ActionEvent> {
 
         currentChart.getAnimationThread().stop();
         currentChart.setRunning(false);
+        this.setChartItemSelected(chart);
+        this.deselectNonRunningCharts(chart);
         this.app.changeCharts(chart);
         chart.start();
+    }
+
+    private void setChartItemSelected(Chart chart) {
+        this.fileMenu.getItems().stream()
+                .map((item) -> (CheckMenuItem) item)
+                .filter((item) -> item.getText().equals(
+                        Util.capitalize(chart.getType().toString())))
+                .findFirst().orElseThrow()
+                .setSelected(true);
+    }
+
+    private void deselectNonRunningCharts(Chart currentChart) {
+        this.fileMenu.getItems().stream()
+                .filter((item) -> !item.getText().equals(
+                        Util.capitalize(currentChart.getType().toString())))
+                .map((item) -> (CheckMenuItem) item)
+                .forEach((item) -> item.setSelected(false));
     }
 }
