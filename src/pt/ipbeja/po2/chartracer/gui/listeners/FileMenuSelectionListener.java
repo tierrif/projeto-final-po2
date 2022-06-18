@@ -14,32 +14,38 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.CheckMenuItem;
-import javafx.scene.control.Menu;
-import pt.ipbeja.po2.chartracer.gui.ChartRacerApp;
 import pt.ipbeja.po2.chartracer.gui.chart.Chart;
 import pt.ipbeja.po2.chartracer.model.DataHandler;
-import pt.ipbeja.po2.chartracer.model.util.Util;
+import pt.ipbeja.po2.chartracer.model.View;
 
 public class FileMenuSelectionListener implements EventHandler<ActionEvent> {
-    private final DataHandler.DataType type;
-    private final Menu fileMenu;
-    private final ChartRacerApp app;
+    private final String type;
+    private final View view;
 
-    public FileMenuSelectionListener(DataHandler.DataType type, Menu fileMenu, ChartRacerApp app) {
+    public FileMenuSelectionListener(String type, View view) {
         this.type = type;
-        this.fileMenu = fileMenu;
-        this.app = app;
+        this.view = view;
     }
 
     @Override
     public void handle(ActionEvent actionEvent) {
-        Chart chart = this.app.getHandler().getCorrespondence(type).chart();
-        Chart currentChart = this.app.getHandler().getCurrentRunningChart();
-        this.deselectNonRunningCharts(currentChart);
+        Chart currentChart = this.view.getDataHandler().getCurrentRunningChart();
+        this.view.deselectAllMenusExceptRunning(currentChart);
+
+        DataHandler.Correspondence correspondence = this.view
+                .getDataHandler().getCorrespondence(type);
+        if (correspondence == null) {
+            Alert alert = new Alert(Alert.AlertType.ERROR,
+                    "Couldn't load this chart.",
+                    ButtonType.OK);
+            alert.setHeaderText(null);
+            alert.showAndWait();
+            return;
+        }
+        Chart chart = correspondence.chart();
 
         if (chart.isRunning()) {
-            this.setChartItemSelected(currentChart);
+            this.view.selectMenu(currentChart);
             Alert alert = new Alert(Alert.AlertType.ERROR,
                     "This chart is already running.",
                     ButtonType.OK);
@@ -61,26 +67,9 @@ public class FileMenuSelectionListener implements EventHandler<ActionEvent> {
 
         currentChart.getAnimationThread().stop();
         currentChart.setRunning(false);
-        this.setChartItemSelected(chart);
-        this.deselectNonRunningCharts(chart);
-        this.app.changeCharts(chart);
+        this.view.selectMenu(chart);
+        this.view.deselectAllMenusExceptRunning(chart);
+        this.view.changeCharts(chart);
         chart.start();
-    }
-
-    private void setChartItemSelected(Chart chart) {
-        this.fileMenu.getItems().stream()
-                .map((item) -> (CheckMenuItem) item)
-                .filter((item) -> item.getText().equals(
-                        Util.capitalize(chart.getType().toString())))
-                .findFirst().orElseThrow()
-                .setSelected(true);
-    }
-
-    private void deselectNonRunningCharts(Chart currentChart) {
-        this.fileMenu.getItems().stream()
-                .filter((item) -> !item.getText().equals(
-                        Util.capitalize(currentChart.getType().toString())))
-                .map((item) -> (CheckMenuItem) item)
-                .forEach((item) -> item.setSelected(false));
     }
 }

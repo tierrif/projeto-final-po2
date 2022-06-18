@@ -22,9 +22,9 @@ import java.util.Comparator;
 import java.util.List;
 
 public abstract class DataReader {
-    private final List<String> readLines;
-    private final String type;
-    private final ChartDataset dataset;
+    private List<String> readLines;
+    private String type;
+    private ChartDataset dataset;
 
     /**
      * Get the file name that contains the
@@ -50,6 +50,7 @@ public abstract class DataReader {
      * @throws IOException In case an error occurs while reading the file.
      */
     public DataReader() throws IOException {
+        if (this.getFileName() == null) return;
         String path = Constants.RESOURCE_PATH + this.getFileName();
         this.type = parseTypeFromPath(path);
         this.readLines = Files.readAllLines(Paths.get(path))
@@ -84,13 +85,25 @@ public abstract class DataReader {
         return dataset;
     }
 
+    public void setReadLines(List<String> readLines) {
+        this.readLines = readLines;
+    }
+
+    public void setDataset(ChartDataset dataset) {
+        this.dataset = dataset;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
     /**
      * Parse the dataset from the read file.
      *
      * @return The parsed dataset as a ChartDataset
      * record instance.
      */
-    private ChartDataset parseDataset() {
+    public ChartDataset parseDataset() {
         String title = this.readLines.get(0);
         String population = this.readLines.get(1);
         String source = this.readLines.get(2);
@@ -141,7 +154,7 @@ public abstract class DataReader {
      * @param path The original file path.
      * @return The parsed dataset type/name.
      */
-    private String parseTypeFromPath(String path) {
+    public String parseTypeFromPath(String path) {
         String[] splitPath = path.split("/");
         return splitPath[splitPath.length - 1].replace(".txt", "")
                 .toLowerCase();

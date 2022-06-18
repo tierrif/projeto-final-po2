@@ -62,7 +62,7 @@ public abstract class Chart extends StackPane implements SkinHandler.Listener {
     public void start() {
         this.isRunning = true;
         this.dataHandler.setCurrentRunningChart(this);
-        this.createChart(dataset.firstChart());
+        this.createChart(this.dataset.firstChart());
         this.startAnimation();
     }
 

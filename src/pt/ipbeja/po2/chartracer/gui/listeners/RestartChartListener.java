@@ -14,22 +14,19 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.CheckMenuItem;
-import javafx.scene.control.Menu;
-import pt.ipbeja.po2.chartracer.gui.ChartRacerApp;
 import pt.ipbeja.po2.chartracer.gui.chart.Chart;
-import pt.ipbeja.po2.chartracer.model.DataHandler;
+import pt.ipbeja.po2.chartracer.model.View;
 
 public class RestartChartListener implements EventHandler<ActionEvent> {
-    private final ChartRacerApp app;
+    private final View view;
 
-    public RestartChartListener(ChartRacerApp app) {
-        this.app = app;
+    public RestartChartListener(View view) {
+        this.view = view;
     }
 
     @Override
     public void handle(ActionEvent actionEvent) {
-        Chart currentChart = this.app.getHandler().getCurrentRunningChart();
+        Chart currentChart = this.view.getDataHandler().getCurrentRunningChart();
         if (currentChart.isRunning()) {
             Alert alert = new Alert(Alert.AlertType.WARNING,
                     "This chart is already running. Are you sure that " +

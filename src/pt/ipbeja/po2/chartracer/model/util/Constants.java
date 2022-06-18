@@ -17,4 +17,5 @@ public class Constants {
     public static final double BAR_HEIGHT = 40.0;
     public static final int MAX_BAR_VALUE = 1000;
     public static final String DEFAULT_SKIN_NAME = "classic";
+    public static final String PICKED_FILE_MENU_ITEM = "picked_file";
 }

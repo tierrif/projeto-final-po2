@@ -13,18 +13,16 @@ import javafx.application.Platform;
 import pt.ipbeja.po2.chartracer.gui.chart.*;
 import pt.ipbeja.po2.chartracer.model.readers.*;
 import pt.ipbeja.po2.chartracer.gui.skins.SkinHandler;
+import pt.ipbeja.po2.chartracer.model.util.Util;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class DataHandler {
-    private final Map<DataType, Correspondence> correspondences;
+    private final Map<String, Correspondence> correspondences;
     private Chart currentRunningChart;
-    private SkinHandler skinHandler;
-    private List<Listener> listeners;
+    private final SkinHandler skinHandler;
+    private final List<Listener> listeners;
 
     public DataHandler(SkinHandler skinHandler) {
         this.correspondences = new HashMap<>();
@@ -51,7 +49,7 @@ public class DataHandler {
         DataReader cityDataReader = new CityDataReader();
         Chart cityChart = new CityChart(cityDataReader.getDataset(), this, this.skinHandler);
         this.skinHandler.addOnSkinChangeListener(cityChart);
-        this.correspondences.put(DataType.CITY, new Correspondence(
+        this.registerCorrespondence(DataType.CITY, new Correspondence(
                 cityDataReader,
                 cityChart
         ));
@@ -74,6 +72,22 @@ public class DataHandler {
     }
 
     /**
+     * Register a correspondence. If the provided type is DataType.OTHER,
+     * the type will be computed by the file name of the provided correspondence.
+     *
+     * @param type The type of the data.
+     * @param correspondence The correspondence to register.
+     */
+    public void registerCorrespondence(DataType type, Correspondence correspondence) {
+        String typeString = Util.capitalize(type.toString()).toLowerCase();
+        if (type == DataType.OTHER) {
+            typeString = correspondence.dataReader().getType();
+        }
+
+        this.correspondences.put(typeString, correspondence);
+    }
+
+    /**
      * Add a listener for when the files
      * are ready.
      *
@@ -88,7 +102,7 @@ public class DataHandler {
         Chart currentChart = new CountryChart(currentDataReader.getDataset(),
                 this, this.skinHandler);
         this.skinHandler.addOnSkinChangeListener(currentChart);
-        this.correspondences.put(DataType.COUNTRY, new Correspondence(
+        this.registerCorrespondence(DataType.COUNTRY, new Correspondence(
                 currentDataReader,
                 currentChart
         ));
@@ -97,7 +111,7 @@ public class DataHandler {
         currentChart = new GameOfThronesChart(currentDataReader.getDataset(),
                 this, this.skinHandler);
         this.skinHandler.addOnSkinChangeListener(currentChart);
-        this.correspondences.put(DataType.GAME_OF_THRONES, new Correspondence(
+        this.registerCorrespondence(DataType.GAME_OF_THRONES, new Correspondence(
                 currentDataReader,
                 currentChart
         ));
@@ -106,7 +120,7 @@ public class DataHandler {
         currentChart = new EndGameChart(currentDataReader.getDataset(),
                 this, this.skinHandler);
         this.skinHandler.addOnSkinChangeListener(currentChart);
-        this.correspondences.put(DataType.ENDGAME, new Correspondence(
+        this.registerCorrespondence(DataType.ENDGAME, new Correspondence(
                 currentDataReader,
                 currentChart
         ));
@@ -139,21 +153,24 @@ public class DataHandler {
      * no correspondence (bug).
      */
     public Correspondence getCorrespondence(DataType dataType) {
-        return this.correspondences.get(dataType);
+        return this.getCorrespondence(Util.capitalize(dataType.toString()).toLowerCase());
     }
 
     /**
-     * Get all stored data types that have a
-     * correspondence.
+     * Get a correspondence, based on the DataReader type
+     * in case the correspondence is supposed to be a runtime
+     * one, or a pre-stored correspondence based on its store
+     * format: dataType.toString().toLowerCase().
      *
-     * @return A list with all stored data types.
+     * @param type The type as a String.
+     * @return The correspondence.
      */
-    public List<DataType> getAllDataTypes() {
-        return this.correspondences.keySet().stream().toList();
+    public Correspondence getCorrespondence(String type) {
+        return this.correspondences.get(type);
     }
 
     public enum DataType {
-        CITY, COUNTRY, GAME_OF_THRONES, ENDGAME;
+        CITY, COUNTRY, GAME_OF_THRONES, ENDGAME, OTHER;
 
         /**
          * Get the default datatype enum.
