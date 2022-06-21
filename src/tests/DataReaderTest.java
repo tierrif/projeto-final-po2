@@ -12,8 +12,11 @@ package tests;
 import org.junit.jupiter.api.Test;
 import pt.ipbeja.po2.chartracer.model.ChartDataset;
 import pt.ipbeja.po2.chartracer.model.readers.CityDataReader;
+import pt.ipbeja.po2.chartracer.model.readers.CountryDataReader;
 import pt.ipbeja.po2.chartracer.model.readers.DataReader;
 import pt.ipbeja.po2.chartracer.model.readers.GameOfThronesDataReader;
+import pt.ipbeja.po2.chartracer.model.stats.Stats;
+import pt.ipbeja.po2.chartracer.model.stats.StatsHandler;
 import pt.ipbeja.po2.chartracer.model.types.BarModel;
 import pt.ipbeja.po2.chartracer.model.util.Constants;
 import pt.ipbeja.po2.chartracer.model.util.Util;
@@ -34,7 +37,7 @@ class DataReaderTest {
         DataReader reader = new CityDataReader();
         ChartDataset dataset = reader.getDataset();
 
-        assertNotEquals(0, dataset.barList().size());
+        assertNotEquals(0, dataset.raw().size());
         System.out.println("Title: " + dataset.title());
         System.out.println("Population: " + dataset.population());
         System.out.println("Source: " + dataset.source());
@@ -64,7 +67,7 @@ class DataReaderTest {
         toWrite.add("");
         toWrite.addAll(secondString);
 
-        Path outPath = Paths.get(Constants.RESOURCE_PATH + "out.txt");
+        Path outPath = Paths.get(Constants.OUTPUT_PATH + "out.txt");
         Files.write(outPath, toWrite);
 
         String[] readCharts = String.join("\n", Files.readAllLines(outPath))
@@ -90,6 +93,15 @@ class DataReaderTest {
     @Test
     void gameOfThronesTest() throws IOException {
         DataReader reader = new GameOfThronesDataReader();
-        System.out.println(reader.getDataset().barList().size());
+        System.out.println(reader.getDataset().raw().size());
+    }
+
+    @Test
+    void statsTest() throws IOException {
+        DataReader reader = new CountryDataReader();
+        StatsHandler handler = new StatsHandler();
+        Stats s = handler.generateStats(reader.getDataset());
+        System.out.println(s.toString());
+        handler.writeToFile(s);
     }
 }

@@ -29,12 +29,7 @@ public class ChartRacerApp extends Application {
      */
     @Override
     public void start(Stage primaryStage) throws IOException {
-        try {
-            primaryStage.setScene(new ChartRacerView(primaryStage));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+        primaryStage.setScene(new ChartRacerView(primaryStage));
         primaryStage.setMinWidth(Constants.WINDOW_WIDTH);
         primaryStage.setMinHeight(Constants.WINDOW_HEIGHT);
         primaryStage.show();

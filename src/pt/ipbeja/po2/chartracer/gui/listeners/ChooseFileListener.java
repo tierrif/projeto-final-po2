@@ -1,4 +1,4 @@
-/*
+/**
  * Instituto Politécnico de Beja
  * Escola Superior de Tecnologia e Gestão
  * Licenciatura em Engenharia Informática
@@ -7,7 +7,6 @@
  *
  * @author Tierri Ferreira <22897@stu.ipbeja.pt>
  */
-
 package pt.ipbeja.po2.chartracer.gui.listeners;
 
 import javafx.event.ActionEvent;
@@ -51,11 +50,11 @@ public class ChooseFileListener implements EventHandler<ActionEvent> {
         try {
             DataReader reader = new GenericDataReader(selectedFile);
 
-            if (reader.getDataset().barList().isEmpty()) {
+            if (reader.getDataset().raw().isEmpty()) {
                 this.errorAlert("This file's format is invalid'.");
                 return;
             }
-            assert !reader.getDataset().barList().isEmpty();
+            assert !reader.getDataset().raw().isEmpty();
             Chart chart = new UniversalChart(reader.getDataset(), this.dataHandler, this.skinHandler);
             dataHandler.registerCorrespondence(DataHandler.DataType.OTHER,
                     new DataHandler.Correspondence(reader, chart));

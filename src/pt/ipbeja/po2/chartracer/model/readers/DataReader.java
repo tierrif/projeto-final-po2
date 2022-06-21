@@ -109,7 +109,7 @@ public abstract class DataReader {
         String source = this.readLines.get(2);
         List<List<BarModel>> parsedCharts = this.parseAllCharts();
 
-        return new ChartDataset(parsedCharts, title, population, source);
+        return new ChartDataset(this.type, parsedCharts, title, population, source);
     }
 
     /**
@@ -131,7 +131,8 @@ public abstract class DataReader {
         List<BarModel> currentList = new ArrayList<>();
         List<List<BarModel>> finalList = new ArrayList<>();
         for (int i = 0; i < lines.size(); i++) {
-        if (Util.isNumeric(lines.get(i)) || i == lines.size() - 1) {
+            if (Util.isNumeric(lines.get(i)) || i == lines.size() - 1) {
+                if (i == lines.size() - 1) currentList.add(this.parseLine(lines.get(i)));
                 if (i != 0) {
                     finalList.add(currentList);
                     currentList = new ArrayList<>();
@@ -144,7 +145,7 @@ public abstract class DataReader {
 
         return finalList.stream().map((chart) -> chart.stream()
                 .sorted(Comparator.reverseOrder()).toList() // Sort the datasets.
-                .subList(0, Math.min(chart.size(), 12))).toList();
+        ).toList();
     }
 
     /**

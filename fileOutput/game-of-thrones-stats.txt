@@ -1,0 +1,7 @@
+Number of data sets in file: 3971
+First date: S1E01 0:01
+Last date: S8E06 1:20
+Average number of lines in each data set: 342.64267
+Number of columns in each data set: 5
+Maximum value considering all data sets: 41104
+Minimum value considering all data sets: 1

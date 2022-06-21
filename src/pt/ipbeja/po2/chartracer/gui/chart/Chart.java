@@ -195,16 +195,17 @@ public abstract class Chart extends StackPane implements SkinHandler.Listener {
     private void startAnimation() {
         this.animationThread = new Thread(() -> {
             // i starts at 1 as we are skipping the first position.
-            for (int i = 1; i < dataset.barList().size(); i++) {
-                List<BarModel> models = dataset.barList().get(i);
-                Platform.runLater(() -> this.createChart(models));
+            for (int i = 1; i < dataset.raw().size(); i++) {
+                List<BarModel> models = dataset.raw().get(i);
+                List<BarModel> finalModels = models.subList(0, Math.min(models.size(), 12));
+                Platform.runLater(() -> this.createChart(finalModels));
                 try {
                     Thread.sleep(models.get(0).animationDelay());
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
 
-                if (i == dataset.barList().size() - 1) this.isRunning = false;
+                if (i == dataset.raw().size() - 1) this.isRunning = false;
             }
         });
 

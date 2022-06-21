@@ -1,4 +1,4 @@
-/*
+/**
  * Instituto Politécnico de Beja
  * Escola Superior de Tecnologia e Gestão
  * Licenciatura em Engenharia Informática
@@ -7,23 +7,15 @@
  *
  * @author Tierri Ferreira <22897@stu.ipbeja.pt>
  */
-
 package pt.ipbeja.po2.chartracer.gui;
 
 import javafx.collections.ObservableList;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontPosture;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import pt.ipbeja.po2.chartracer.gui.chart.Chart;
 import pt.ipbeja.po2.chartracer.gui.listeners.ChooseFileListener;
@@ -34,6 +26,7 @@ import pt.ipbeja.po2.chartracer.gui.skins.SkinHandler;
 import pt.ipbeja.po2.chartracer.gui.skins.SkinMenuItem;
 import pt.ipbeja.po2.chartracer.model.DataHandler;
 import pt.ipbeja.po2.chartracer.model.View;
+import pt.ipbeja.po2.chartracer.model.stats.StatsHandler;
 import pt.ipbeja.po2.chartracer.model.util.Constants;
 import pt.ipbeja.po2.chartracer.model.util.Util;
 
@@ -41,17 +34,18 @@ import java.io.IOException;
 import java.nio.file.NoSuchFileException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 
 public class ChartRacerView extends Scene implements View, SkinHandler.Listener,
         DataHandler.Listener {
-    private DataHandler dataHandler;
     private final VBox mainBox;
-    private SkinHandler skinHandler;
-    private MenuBar menuBar;
-    private Menu fileMenu;
     private final Stage mainStage;
-    private CheckMenuItem otherItem;
+
+    private DataHandler dataHandler;
+    private SkinHandler skinHandler;
+    private StatsHandler statsHandler;
+
+    private Menu fileMenu;
+    private CheckMenuItem otherItem, generateFileItem;
 
     public ChartRacerView(Stage mainStage) throws IOException {
         super(new VBox());
@@ -61,7 +55,7 @@ public class ChartRacerView extends Scene implements View, SkinHandler.Listener,
     }
 
     /**
-     * Start the chart.
+     * Start the chart app.
      *
      * @throws IOException If there's an issue while
      *                     reading the dataset files.
@@ -71,6 +65,7 @@ public class ChartRacerView extends Scene implements View, SkinHandler.Listener,
         this.skinHandler.addOnSkinChangeListener(this);
         this.dataHandler = new DataHandler(this.skinHandler);
         this.dataHandler.addOnReadyListener(this);
+        this.statsHandler = new StatsHandler();
         try {
             this.dataHandler.initialize();
         } catch (NoSuchFileException e) {
@@ -80,10 +75,10 @@ public class ChartRacerView extends Scene implements View, SkinHandler.Listener,
             alert.setHeaderText(null);
             alert.showAndWait();
         }
-        this.menuBar = this.createMenu();
+        MenuBar menuBar = this.createMenu();
         Chart chart = this.dataHandler.getCorrespondence(DataHandler.DataType.CITY).chart();
         chart.start();
-        this.mainBox.getChildren().addAll(this.menuBar, chart);
+        this.mainBox.getChildren().addAll(menuBar, chart);
         this.setFill(this.skinHandler.current().background());
     }
 
@@ -141,11 +136,33 @@ public class ChartRacerView extends Scene implements View, SkinHandler.Listener,
     }
 
     /**
-     *
+     * Force-select the check menu item for
+     * selected files in the chart selection
+     * sub-menu.
      */
     @Override
     public void selectOtherMenu() {
         this.otherItem.setSelected(true);
+    }
+
+    /**
+     * Check whether the Generate File check
+     * menu item is selected.
+     *
+     * @return True if it is, false if it isn't.
+     */
+    @Override
+    public boolean generateFileSelected() {
+        return this.generateFileItem.isSelected();
+    }
+
+    /**
+     * Force-deselect the Generate File
+     * check menu item.
+     */
+    @Override
+    public void deselectGenerateFile() {
+        this.generateFileItem.setSelected(false);
     }
 
     /**
@@ -158,6 +175,21 @@ public class ChartRacerView extends Scene implements View, SkinHandler.Listener,
         return this.dataHandler;
     }
 
+    /**
+     * Get the stats' handler.
+     *
+     * @return The stats' handler.
+     */
+    @Override
+    public StatsHandler getStatsHandler() {
+        return this.statsHandler;
+    }
+
+    /**
+     * Runs everytime the user changes the skin.
+     *
+     * @param newSkin The new skin the user selected.
+     */
     @Override
     public void onSkinChange(ChartSkin newSkin) {
         this.mainBox.setBackground(new Background(new BackgroundFill(
@@ -167,6 +199,10 @@ public class ChartRacerView extends Scene implements View, SkinHandler.Listener,
         )));
     }
 
+    /**
+     * Runs everytime the additional datasets have loaded
+     * from the background.
+     */
     @Override
     public void onReady() {
         this.generateChartMenu(this.fileMenu);
@@ -201,9 +237,19 @@ public class ChartRacerView extends Scene implements View, SkinHandler.Listener,
 
         menu.getMenus().add(skins);
 
+        Menu data = new Menu("Data");
+        this.generateFileItem = new CheckMenuItem("Generate File");
+        data.getItems().add(this.generateFileItem);
+
         return menu;
     }
 
+    /**
+     * Generate the Chart menu. This will fill the menu with the
+     * items relevant to it.
+     *
+     * @param currentChart The already created chart selection menu.
+     */
     private void generateChartMenu(Menu currentChart) {
         currentChart.getItems().clear();
         List<String> types = Arrays.stream(DataHandler.DataType.values())

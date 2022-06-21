@@ -10,6 +10,7 @@
 package pt.ipbeja.po2.chartracer.model.util;
 
 public class Constants {
+    public static final int COLUMN_AMOUNT = 5;
     public static final String RESOURCE_PATH = "resources/";
     public static final double INNER_WIDTH = 1000.0;
     public static final double WINDOW_WIDTH = 1100.0;
@@ -18,4 +19,5 @@ public class Constants {
     public static final int MAX_BAR_VALUE = 1000;
     public static final String DEFAULT_SKIN_NAME = "classic";
     public static final String PICKED_FILE_MENU_ITEM = "picked_file";
+    public static final String OUTPUT_PATH = "fileOutput/";
 }

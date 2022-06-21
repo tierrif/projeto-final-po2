@@ -18,7 +18,7 @@ import java.util.Map;
 
 public class SkinHandler {
     private final Map<String, ChartSkin> skins;
-    private List<Listener> listeners;
+    private final List<Listener> listeners;
     private ChartSkin currentSkin;
 
     public SkinHandler() {

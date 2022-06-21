@@ -17,7 +17,8 @@ import java.util.List;
  * Represents a full dataset with a list of charts
  * with bars collecting their ordered data.
  */
-public record ChartDataset(List<List<BarModel>> barList,
+public record ChartDataset(String type,
+                           List<List<BarModel>> raw,
                            String title,
                            String population,
                            String source) {
@@ -29,7 +30,7 @@ public record ChartDataset(List<List<BarModel>> barList,
      * @return The first chart in a list of BarModels.
      */
     public List<BarModel> firstChart() {
-        return this.barList.get(0);
+        return this.raw.get(0);
     }
 
     /**
@@ -39,6 +40,6 @@ public record ChartDataset(List<List<BarModel>> barList,
      * @return The last chart in a list of BarModels.
      */
     public List<BarModel> lastChart() {
-        return this.barList.get(this.barList.size() - 1);
+        return this.raw.get(this.raw.size() - 1);
     }
 }

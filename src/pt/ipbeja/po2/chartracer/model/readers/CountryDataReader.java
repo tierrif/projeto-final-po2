@@ -12,6 +12,7 @@ package pt.ipbeja.po2.chartracer.model.readers;
 
 import pt.ipbeja.po2.chartracer.model.types.BarModel;
 import pt.ipbeja.po2.chartracer.model.types.Country;
+import pt.ipbeja.po2.chartracer.model.util.Constants;
 
 import java.io.IOException;
 
@@ -42,7 +43,7 @@ public class CountryDataReader extends DataReader {
     @Override
     public BarModel parseLine(String line) {
         String[] splitString = line.split(",");
-        assert splitString.length == 5;
+        assert splitString.length == Constants.COLUMN_AMOUNT;
         return new Country(
                 splitString[0],
                 splitString[1],

@@ -13,6 +13,7 @@ package pt.ipbeja.po2.chartracer.model.readers;
 import pt.ipbeja.po2.chartracer.model.types.BarModel;
 import pt.ipbeja.po2.chartracer.model.types.Country;
 import pt.ipbeja.po2.chartracer.model.types.Generic;
+import pt.ipbeja.po2.chartracer.model.util.Constants;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -61,7 +62,7 @@ public class GenericDataReader extends DataReader {
     @Override
     public BarModel parseLine(String line) {
         String[] splitString = line.split(",");
-        assert splitString.length == 5;
+        assert splitString.length == Constants.COLUMN_AMOUNT;
         return new Generic(
                 splitString[0],
                 Integer.parseInt(splitString[3]),
