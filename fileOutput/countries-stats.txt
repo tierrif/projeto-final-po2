@@ -1,7 +1,0 @@
-Number of data sets in file: 1801
-First date: 1950-01-01
-Last date: 2100-01-01
-Average number of lines in each data set: 233.0
-Number of columns in each data set: 5
-Maximum value considering all data sets: 1678656
-Minimum value considering all data sets: 1

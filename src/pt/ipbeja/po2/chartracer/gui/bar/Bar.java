@@ -25,7 +25,6 @@ public class Bar extends StackPane {
     private final String name;
     private Color color;
     private final SkinHandler skin;
-    private Rectangle barRectangle;
 
     /**
      * Create a Bar item.
@@ -49,19 +48,19 @@ public class Bar extends StackPane {
      */
     private void createBar() {
         HBox box = new HBox();
-        this.barRectangle = new Rectangle();
-        this.barRectangle.setWidth(this.width);
-        this.barRectangle.setHeight(Constants.BAR_HEIGHT);
-        this.barRectangle.setFill(this.color);
+        Rectangle barRectangle = new Rectangle();
+        barRectangle.setWidth(this.width);
+        barRectangle.setHeight(Constants.BAR_HEIGHT);
+        barRectangle.setFill(this.color);
 
         Text valueText = new Text(String.valueOf(this.value));
-        HBox.setMargin(valueText, new Insets(0, 0, 0, 5));
+        HBox.setMargin(valueText, new Insets(0, 0, 0, Constants.SMALL_MARGIN));
 
         TextStyle valueStyle = skin.current().barValueFont();
         valueText.setFont(valueStyle.font());
         valueText.setFill(valueStyle.fill());
 
-        box.getChildren().addAll(this.barRectangle, valueText);
+        box.getChildren().addAll(barRectangle, valueText);
         box.setMaxWidth(this.width);
         box.setAlignment(Pos.CENTER_LEFT);
 
@@ -70,8 +69,10 @@ public class Bar extends StackPane {
         nameText.setFont(nameStyle.font());
         nameText.setFill(nameStyle.fill());
 
-        StackPane.setMargin(nameText, new Insets(0, 0, 5, 15));
-        StackPane.setMargin(box, new Insets(0, 0, 5, 5));
+        StackPane.setMargin(nameText, new Insets(0, 0,
+                Constants.SMALL_MARGIN, Constants.MEDIUM_MARGIN));
+        StackPane.setMargin(box, new Insets(0, 0,
+                Constants.SMALL_MARGIN, Constants.SMALL_MARGIN));
 
         this.getChildren().addAll(box, nameText);
         this.setAlignment(Pos.CENTER_LEFT);

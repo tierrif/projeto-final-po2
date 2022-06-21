@@ -20,4 +20,7 @@ public class Constants {
     public static final String DEFAULT_SKIN_NAME = "classic";
     public static final String PICKED_FILE_MENU_ITEM = "picked_file";
     public static final String OUTPUT_PATH = "fileOutput/";
+    public static final int SMALL_MARGIN = 5;
+    public static final int MEDIUM_MARGIN = 15;
+    public static final int BAR_AMOUNT_IN_CHART = 12;
 }

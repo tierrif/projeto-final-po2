@@ -12,14 +12,9 @@ package tests;
 import org.junit.jupiter.api.Test;
 import pt.ipbeja.po2.chartracer.model.ChartDataset;
 import pt.ipbeja.po2.chartracer.model.readers.CityDataReader;
-import pt.ipbeja.po2.chartracer.model.readers.CountryDataReader;
 import pt.ipbeja.po2.chartracer.model.readers.DataReader;
-import pt.ipbeja.po2.chartracer.model.readers.GameOfThronesDataReader;
-import pt.ipbeja.po2.chartracer.model.stats.Stats;
-import pt.ipbeja.po2.chartracer.model.stats.StatsHandler;
 import pt.ipbeja.po2.chartracer.model.types.BarModel;
 import pt.ipbeja.po2.chartracer.model.util.Constants;
-import pt.ipbeja.po2.chartracer.model.util.Util;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -33,28 +28,28 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class DataReaderTest {
     @Test
-    void teste1() throws IOException {
+    void test1() throws IOException {
         DataReader reader = new CityDataReader();
         ChartDataset dataset = reader.getDataset();
 
         assertNotEquals(0, dataset.raw().size());
-        System.out.println("Title: " + dataset.title());
-        System.out.println("Population: " + dataset.population());
-        System.out.println("Source: " + dataset.source());
+        assertEquals("The most populous cities in the world from 1500 to 2018", dataset.title());
+        assertEquals("Population (thousands)", dataset.population());
+        assertEquals("Sources: SEDAC; United Nations; Demographia", dataset.source());
     }
 
     @Test
-    void teste2() throws IOException {
+    void test2() throws IOException {
         DataReader reader = new CityDataReader();
         ChartDataset dataset = reader.getDataset();
 
-        System.out.println(dataset.firstChart());
-        System.out.println("--------");
-        System.out.println(dataset.lastChart());
+        // If the datasets are sorted, the first element will be the greatest.
+        assertEquals(672, dataset.firstChart().get(0).correspondingValue());
+        assertEquals(38194, dataset.lastChart().get(0).correspondingValue());
     }
 
     @Test
-    void teste3() throws IOException {
+    void test3() throws IOException {
         DataReader reader = new CityDataReader();
         ChartDataset dataset = reader.getDataset();
 
@@ -79,29 +74,7 @@ class DataReaderTest {
 
         BarModel firstOutModel = outModels.get(0);
         BarModel firstReadModel = dataset.firstChart().get(0);
+
         assertEquals(firstOutModel.toString(), firstReadModel.toString());
-
-        System.out.println(firstOutModel);
-        System.out.println(firstReadModel);
-    }
-
-    @Test
-    void capitalizetTest() {
-        System.out.println(Util.capitalize("GAME_OF_THRONES"));
-    }
-
-    @Test
-    void gameOfThronesTest() throws IOException {
-        DataReader reader = new GameOfThronesDataReader();
-        System.out.println(reader.getDataset().raw().size());
-    }
-
-    @Test
-    void statsTest() throws IOException {
-        DataReader reader = new CountryDataReader();
-        StatsHandler handler = new StatsHandler();
-        Stats s = handler.generateStats(reader.getDataset());
-        System.out.println(s.toString());
-        handler.writeToFile(s);
     }
 }

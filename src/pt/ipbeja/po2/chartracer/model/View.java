@@ -14,12 +14,20 @@ import pt.ipbeja.po2.chartracer.model.stats.StatsHandler;
 
 public interface View {
     DataHandler getDataHandler();
+
     StatsHandler getStatsHandler();
+
     void changeCharts(Chart chart);
+
     void deselectAllMenusExceptRunning(Chart currentChart);
+
     void deselectAllMenus();
+
     void selectMenu(Chart toSelect);
+
     void selectOtherMenu();
+
     boolean generateFileSelected();
+
     void deselectGenerateFile();
 }

@@ -206,7 +206,8 @@ public abstract class Chart extends StackPane implements SkinHandler.Listener {
             // i starts at 1 as we are skipping the first position.
             for (int i = 1; i < dataset.raw().size(); i++) {
                 List<BarModel> models = dataset.raw().get(i);
-                List<BarModel> finalModels = models.subList(0, Math.min(models.size(), 12));
+                List<BarModel> finalModels = models.subList(0,
+                        Math.min(models.size(), Constants.BAR_AMOUNT_IN_CHART));
                 Platform.runLater(() -> this.createChart(finalModels));
                 try {
                     Thread.sleep(models.get(0).animationDelay());
@@ -261,7 +262,7 @@ public abstract class Chart extends StackPane implements SkinHandler.Listener {
         title.setFill(style.fill());
 
         title.setWrappingWidth(Constants.INNER_WIDTH);
-        VBox.setMargin(title, new Insets(5));
+        VBox.setMargin(title, new Insets(Constants.SMALL_MARGIN));
 
         return title;
     }
@@ -281,7 +282,7 @@ public abstract class Chart extends StackPane implements SkinHandler.Listener {
         populationLabel.setFill(style.fill());
 
         populationLabel.setWrappingWidth(Constants.INNER_WIDTH);
-        VBox.setMargin(populationLabel, new Insets(5));
+        VBox.setMargin(populationLabel, new Insets(Constants.SMALL_MARGIN));
 
         return populationLabel;
     }
