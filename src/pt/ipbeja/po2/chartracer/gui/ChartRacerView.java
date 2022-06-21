@@ -63,7 +63,7 @@ public class ChartRacerView extends Scene implements View, SkinHandler.Listener,
     private void initialize() throws IOException {
         this.skinHandler = new SkinHandler();
         this.skinHandler.addOnSkinChangeListener(this);
-        this.dataHandler = new DataHandler(this.skinHandler);
+        this.dataHandler = new DataHandler(this.skinHandler, this);
         this.dataHandler.addOnReadyListener(this);
         this.statsHandler = new StatsHandler();
         try {
@@ -240,6 +240,8 @@ public class ChartRacerView extends Scene implements View, SkinHandler.Listener,
         Menu data = new Menu("Data");
         this.generateFileItem = new CheckMenuItem("Generate File");
         data.getItems().add(this.generateFileItem);
+
+        menu.getMenus().add(data);
 
         return menu;
     }

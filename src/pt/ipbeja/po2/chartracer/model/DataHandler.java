@@ -23,11 +23,13 @@ public class DataHandler {
     private Chart currentRunningChart;
     private final SkinHandler skinHandler;
     private final List<Listener> listeners;
+    private final View view;
 
-    public DataHandler(SkinHandler skinHandler) {
+    public DataHandler(SkinHandler skinHandler, View view) {
         this.correspondences = new HashMap<>();
         this.skinHandler = skinHandler;
         this.listeners = new ArrayList<>();
+        this.view = view;
     }
 
     /**
@@ -47,7 +49,7 @@ public class DataHandler {
     public void initialize() throws IOException {
         // Default.
         DataReader cityDataReader = new CityDataReader();
-        Chart cityChart = new CityChart(cityDataReader.getDataset(), this, this.skinHandler);
+        Chart cityChart = new CityChart(cityDataReader.getDataset(), this, this.skinHandler, this.view);
         this.skinHandler.addOnSkinChangeListener(cityChart);
         this.registerCorrespondence(DataType.CITY, new Correspondence(
                 cityDataReader,
@@ -100,7 +102,7 @@ public class DataHandler {
     private void backgroundInit() throws IOException {
         DataReader currentDataReader = new CountryDataReader();
         Chart currentChart = new CountryChart(currentDataReader.getDataset(),
-                this, this.skinHandler);
+                this, this.skinHandler, this.view);
         this.skinHandler.addOnSkinChangeListener(currentChart);
         this.registerCorrespondence(DataType.COUNTRY, new Correspondence(
                 currentDataReader,
@@ -109,7 +111,7 @@ public class DataHandler {
 
         currentDataReader = new GameOfThronesDataReader();
         currentChart = new GameOfThronesChart(currentDataReader.getDataset(),
-                this, this.skinHandler);
+                this, this.skinHandler, this.view);
         this.skinHandler.addOnSkinChangeListener(currentChart);
         this.registerCorrespondence(DataType.GAME_OF_THRONES, new Correspondence(
                 currentDataReader,
@@ -118,7 +120,7 @@ public class DataHandler {
 
         currentDataReader = new EndGameDataReader();
         currentChart = new EndGameChart(currentDataReader.getDataset(),
-                this, this.skinHandler);
+                this, this.skinHandler, this.view);
         this.skinHandler.addOnSkinChangeListener(currentChart);
         this.registerCorrespondence(DataType.ENDGAME, new Correspondence(
                 currentDataReader,

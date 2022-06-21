@@ -55,7 +55,7 @@ public class ChooseFileListener implements EventHandler<ActionEvent> {
                 return;
             }
             assert !reader.getDataset().raw().isEmpty();
-            Chart chart = new UniversalChart(reader.getDataset(), this.dataHandler, this.skinHandler);
+            Chart chart = new UniversalChart(reader.getDataset(), this.dataHandler, this.skinHandler, this.view);
             dataHandler.registerCorrespondence(DataHandler.DataType.OTHER,
                     new DataHandler.Correspondence(reader, chart));
 

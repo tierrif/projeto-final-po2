@@ -42,11 +42,14 @@ public class StatsHandler {
      * Write stats to a file.
      *
      * @param stats The stats to write.
+     * @return The file name.
      */
-    public void writeToFile(Stats stats) throws IOException {
+    public String writeToFile(Stats stats) throws IOException {
         Path outPath = Paths.get(Constants.OUTPUT_PATH +
                 stats.name().toLowerCase() + "-stats.txt");
         Files.write(outPath, Arrays.asList(stats.toString().split("\n")));
+
+        return outPath.toString();
     }
 
     /**

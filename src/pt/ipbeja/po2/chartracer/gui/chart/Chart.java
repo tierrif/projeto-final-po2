@@ -12,6 +12,8 @@ package pt.ipbeja.po2.chartracer.gui.chart;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -22,10 +24,13 @@ import pt.ipbeja.po2.chartracer.model.DataHandler;
 import pt.ipbeja.po2.chartracer.gui.skins.ChartSkin;
 import pt.ipbeja.po2.chartracer.gui.skins.SkinHandler;
 import pt.ipbeja.po2.chartracer.gui.skins.TextStyle;
+import pt.ipbeja.po2.chartracer.model.View;
+import pt.ipbeja.po2.chartracer.model.stats.Stats;
 import pt.ipbeja.po2.chartracer.model.types.BarModel;
 import pt.ipbeja.po2.chartracer.model.util.Constants;
 import pt.ipbeja.po2.chartracer.model.util.Util;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +44,7 @@ public abstract class Chart extends StackPane implements SkinHandler.Listener {
     private final SkinHandler skin;
     private VBox chartBox;
     private VBox bottomRightInfo;
+    private final View view;
 
     /**
      * Create a full Chart pane for this
@@ -47,11 +53,12 @@ public abstract class Chart extends StackPane implements SkinHandler.Listener {
      *
      * @param dataset The dataset to work with.
      */
-    public Chart(ChartDataset dataset, DataHandler dataHandler, SkinHandler skin) {
+    public Chart(ChartDataset dataset, DataHandler dataHandler, SkinHandler skin, View view) {
         this.dataset = dataset;
         this.colors = new HashMap<>();
         this.dataHandler = dataHandler;
         this.skin = skin;
+        this.view = view;
     }
 
     /**
@@ -193,6 +200,8 @@ public abstract class Chart extends StackPane implements SkinHandler.Listener {
      * a frame) every iteration.
      */
     private void startAnimation() {
+        // Create stats if applicable.
+        this.handleStats();
         this.animationThread = new Thread(() -> {
             // i starts at 1 as we are skipping the first position.
             for (int i = 1; i < dataset.raw().size(); i++) {
@@ -210,6 +219,31 @@ public abstract class Chart extends StackPane implements SkinHandler.Listener {
         });
 
         this.animationThread.start();
+    }
+
+    /**
+     * Check if stats must be generated and
+     * generate them if so.
+     */
+    private void handleStats() {
+        if (this.view.generateFileSelected()) {
+            Stats stats = view.getStatsHandler().generateStats(this.dataset);
+            try {
+                String path = view.getStatsHandler().writeToFile(stats);
+                Alert alert = new Alert(Alert.AlertType.INFORMATION,
+                        "Successfully generated stats file at " + path,
+                        ButtonType.OK);
+                alert.setHeaderText(null);
+                alert.showAndWait();
+                view.deselectGenerateFile();
+            } catch (IOException e) {
+                Alert alert = new Alert(Alert.AlertType.ERROR,
+                        "Couldn't write stats file.",
+                        ButtonType.OK);
+                alert.setHeaderText(null);
+                alert.showAndWait();
+            }
+        }
     }
 
     /**

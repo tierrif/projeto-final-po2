@@ -14,13 +14,14 @@ import pt.ipbeja.po2.chartracer.gui.bar.Bar;
 import pt.ipbeja.po2.chartracer.gui.skins.SkinHandler;
 import pt.ipbeja.po2.chartracer.model.ChartDataset;
 import pt.ipbeja.po2.chartracer.model.DataHandler;
+import pt.ipbeja.po2.chartracer.model.View;
 import pt.ipbeja.po2.chartracer.model.types.BarModel;
 import pt.ipbeja.po2.chartracer.model.types.City;
 import pt.ipbeja.po2.chartracer.model.types.Generic;
 
 public class UniversalChart extends Chart {
-    public UniversalChart(ChartDataset dataset, DataHandler handler, SkinHandler skinHandler) {
-        super(dataset, handler, skinHandler);
+    public UniversalChart(ChartDataset dataset, DataHandler handler, SkinHandler skinHandler, View view) {
+        super(dataset, handler, skinHandler, view);
     }
 
     /**

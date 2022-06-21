@@ -14,12 +14,13 @@ import pt.ipbeja.po2.chartracer.gui.bar.Bar;
 import pt.ipbeja.po2.chartracer.model.ChartDataset;
 import pt.ipbeja.po2.chartracer.model.DataHandler;
 import pt.ipbeja.po2.chartracer.gui.skins.SkinHandler;
+import pt.ipbeja.po2.chartracer.model.View;
 import pt.ipbeja.po2.chartracer.model.types.BarModel;
 import pt.ipbeja.po2.chartracer.model.types.GameOfThrones;
 
 public class GameOfThronesChart extends Chart {
-    public GameOfThronesChart(ChartDataset dataset, DataHandler handler, SkinHandler skinHandler) {
-        super(dataset, handler, skinHandler);
+    public GameOfThronesChart(ChartDataset dataset, DataHandler handler, SkinHandler skinHandler, View view) {
+        super(dataset, handler, skinHandler, view);
     }
 
     /**
