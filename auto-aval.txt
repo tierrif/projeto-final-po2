@@ -1,0 +1,26 @@
+Escola Superior de Tecnologia e Gestão - IPBeja
+Trabalho Prático de Avaliação de PO2
+Tierri Ferreira - 22897, André Azevedo - 22483
+
+E1 - 1,5
+E2 - 2,5
+E3 - 1,5
+E4 - 3,0
+NE1 - 2,0
+NE2 - 2,0
+NE3 - 2,0
+PB1 - 0,0
+PB2 - 1,5
+PB3 - 0,0
+PB4 - 0,0
+PB5 - 0,0
+PB6 - 0,0
+PB7 - 2,5
+PB8 - N/A
+PB9 - N/A
+PB10 - N/A
+
+Total: 18,5
+
+Tempo gasto no trabalho fora de aulas (em horas): 84
+Tempo gasto no trabalho em aula (em horas): 0
